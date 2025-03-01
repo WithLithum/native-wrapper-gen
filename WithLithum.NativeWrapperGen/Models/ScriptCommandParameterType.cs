@@ -43,5 +43,6 @@ public enum ScriptCommandParameterType
     ScrHandlePointer,
     Vector3Pointer,
     Vehicle,
-    VehiclePointer
+    VehiclePointer,
+    Vector3
 }

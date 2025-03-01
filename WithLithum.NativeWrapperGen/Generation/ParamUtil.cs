@@ -1,30 +1,32 @@
 ﻿namespace WithLithum.NativeWrapperGen.Generation;
 
-using WithLithum.NativeWrapperGen.Models;
+using System.Collections.ObjectModel;
+
+using SCPT = Models.ScriptCommandParameterType;
 
 internal static class ParamUtil
 {
-    private static readonly HashSet<ScriptCommandParameterType> PointerTypes =
-    [
-        ScriptCommandParameterType.FireIdPointer,
-        ScriptCommandParameterType.IntPointer,
-        ScriptCommandParameterType.PlayerPointer,
-        ScriptCommandParameterType.PickupPointer,
-        ScriptCommandParameterType.PedPointer,
-        ScriptCommandParameterType.AnyPointer,
-        ScriptCommandParameterType.BooleanPointer,
-        ScriptCommandParameterType.CamPointer,
-        ScriptCommandParameterType.EntityPointer,
-        ScriptCommandParameterType.VehiclePointer,
-        ScriptCommandParameterType.ScrHandlePointer,
-        ScriptCommandParameterType.FloatPointer,
-        ScriptCommandParameterType.InteriorPointer,
-        ScriptCommandParameterType.BlipPointer,
-        ScriptCommandParameterType.Vector3Pointer,
-        ScriptCommandParameterType.ItemSetPointer,
-        ScriptCommandParameterType.HashPointer,
-        ScriptCommandParameterType.ObjectPointer
-    ];
+    internal static readonly ReadOnlyDictionary<SCPT, SCPT> PointerToRegularMap =
+    new Dictionary<SCPT, SCPT>()
+    {
+        { SCPT.FireIdPointer, SCPT.FireId },
+        { SCPT.IntPointer, SCPT.Int },
+        { SCPT.PlayerPointer, SCPT.Player },
+        { SCPT.PickupPointer, SCPT.Pickup },
+        { SCPT.PedPointer, SCPT.Ped },
+        { SCPT.BooleanPointer, SCPT.Boolean },
+        { SCPT.CamPointer, SCPT.Cam },
+        { SCPT.EntityPointer, SCPT.Entity },
+        { SCPT.VehiclePointer, SCPT.Vehicle },
+        { SCPT.ScrHandlePointer, SCPT.ScrHandle },
+        { SCPT.FloatPointer, SCPT.Float },
+        { SCPT.InteriorPointer, SCPT.Interior },
+        { SCPT.BlipPointer, SCPT.Blip },
+        { SCPT.Vector3Pointer, SCPT.Vector3 },
+        { SCPT.ItemSetPointer, SCPT.ItemSet },
+        { SCPT.HashPointer, SCPT.Hash },
+        { SCPT.ObjectPointer, SCPT.Object }
+    }.AsReadOnly();
 
     private static readonly HashSet<string> EscapeParamNames =
     [
@@ -47,9 +49,9 @@ internal static class ParamUtil
         return name;
     }
 
-    internal static bool IsPointerType(ScriptCommandParameterType type)
+    internal static bool IsPointerType(SCPT type)
     {
-        return PointerTypes.Contains(type);
+        return PointerToRegularMap.ContainsKey(type);
     }
 
     internal static string StripRef(string typeName)

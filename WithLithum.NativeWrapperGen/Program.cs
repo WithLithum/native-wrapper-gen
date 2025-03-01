@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.Diagnostics;
 using WithLithum.NativeWrapperGen;
 using WithLithum.NativeWrapperGen.Generation;
 using WithLithum.NativeWrapperGen.Models;
@@ -26,16 +27,20 @@ var optClassName = new Option<string>("--class-name",
     () => defaultClassName,
     description: "The natives file class name.");
 
+var optCountTime = new Option<bool>("--count-time",
+    description: "Counts total time cost of generation");
+
 var command = new RootCommand("Generates wrappers for GTA V script commands / natives")
 {
     optNativesFile,
     optConfigFile,
     optNameFormat,
     optNameSpace,
-    optClassName
+    optClassName,
+    optCountTime
 };
 
-command.SetHandler((nativesFile, configFile, nameFormat, nameSpace, className) =>
+command.SetHandler((nativesFile, configFile, nameFormat, nameSpace, className, countTime) =>
 {
     ScriptCommandManifest? information;
     GeneratorSettings? settings;
@@ -64,8 +69,22 @@ command.SetHandler((nativesFile, configFile, nameFormat, nameSpace, className) =
     nameSpace ?? defaultNameSpace,
     className ?? defaultClassName,
     settings);
+
+    Stopwatch? stopwatch = null;
+    if (countTime)
+    {
+        stopwatch = Stopwatch.StartNew();
+    }
+    
     multiGenerator.GenerateComplete(information);
 
-}, optNativesFile, optConfigFile, optNameFormat, optNameSpace, optClassName);
+    if (stopwatch != null)
+    {
+        stopwatch.Stop();
+        Console.WriteLine("Generation took {0}ms (or {1})", stopwatch.ElapsedMilliseconds,
+            stopwatch.Elapsed);
+    }
+
+}, optNativesFile, optConfigFile, optNameFormat, optNameSpace, optClassName, optCountTime);
 
 command.Invoke(args);

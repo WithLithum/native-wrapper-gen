@@ -241,13 +241,14 @@ public partial class WrapperFileGenerator
     internal string GetStringForType(ScriptCommandParameterType paramType,
         bool stripRef = false)
     {
-        if (_settings.ParameterTypes.TryGetValue(paramType, out var writeType))
+        if (stripRef
+            && ParamUtil.PointerToRegularMap.TryGetValue(paramType, out var resultType))
         {
-            if (stripRef && ParamUtil.IsPointerType(paramType))
-            {
-                return ParamUtil.StripRef(writeType);
+            return GetStringForType(resultType, false);
         }
 
+        if (_settings.ParameterTypes.TryGetValue(paramType, out var writeType))
+        {
             return writeType;
         }
 

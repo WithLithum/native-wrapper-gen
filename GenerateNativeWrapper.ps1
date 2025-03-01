@@ -22,4 +22,4 @@ if (!($NoDownload)) {
     }
 }
 
-dotnet run --project "WithLithum.NativeWrapperGen" -- --natives-file "${nativesJsonPath}" --namespace WithLithum.NativeWrapper --class-name Natives --file-name-format "$wrapperPath"
+dotnet run --project "WithLithum.NativeWrapperGen" -- --natives-file "${nativesJsonPath}" --namespace WithLithum.NativeWrapper --class-name Natives --file-name-format "$wrapperPath" --count-time

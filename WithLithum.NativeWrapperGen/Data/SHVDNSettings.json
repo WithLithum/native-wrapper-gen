@@ -37,7 +37,8 @@
     "Vehicle": "int",
     "VehiclePointer": "ref int",
     "Ped": "int",
-    "PedPointer": "ref int"
+    "PedPointer": "ref int",
+    "Vector3": "global::GTA.Math.Vector3"
   },
   "return_types": {
     "Any": "object",
