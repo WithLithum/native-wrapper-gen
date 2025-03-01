@@ -7,6 +7,12 @@
     <Nullable>enable</Nullable>
     <PublishAot>true</PublishAot>
     <InvariantGlobalization>true</InvariantGlobalization>
+    <Title>Native Wrapper Generator for GTA V</Title>
+    <Description>A generator for generating wrappers around GTA V natives, based on alloc8or's gta5-nativedb-data</Description>
+    <Copyright>(C) WithLithum 2025.</Copyright>
+    <RepositoryUrl>https://github.com/WithLithum/native-wrapper-gen.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/WithLithum/native-wrapper-gen</PackageProjectUrl>
+    <PackageTags>gta5;gtav;scripthookvdotnet;shvdn;shvdn3;scripthookvdotnet3;gta5-script;gtav-script;gta5-modding;gtav-modding;gta5-natives;</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
