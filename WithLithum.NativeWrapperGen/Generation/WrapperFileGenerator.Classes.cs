@@ -23,6 +23,7 @@ partial class WrapperFileGenerator
 
     internal void WriteClassScopeHeader(string className)
     {
+        _writer.WriteLine("/// <summary>Provides wrappers for GTA V script commands.</summary>");
         _writer.WriteLine("public static partial class {0}", className);
         _writer.WriteLine('{');
     }

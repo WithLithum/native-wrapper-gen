@@ -13,12 +13,24 @@
 // limitations under the License.
 namespace WithLithum.NativeWrapperGen.Generation;
 
+using System.Text;
 using WithLithum.NativeWrapperGen.Models;
 
 public partial class WrapperFileGenerator
 {
     private const string HashValueFieldTemplate = "NWG_{0}_Value";
     private const string ShimVariableTemplate = "NWG_{0}_shim";
+
+    private static string EscapeForDocumentation(string comment)
+    {
+        var sb = new StringBuilder(comment)
+            .Replace("&", "&amp;")
+            .Replace("<", "&lt;")
+            .Replace(">", "&gt;")
+            .Replace("\n", "<br />");
+
+        return sb.ToString();
+    }
 
     internal void WriteDocumentation(WrapperEmitContext context)
     {
@@ -30,7 +42,7 @@ public partial class WrapperFileGenerator
             _writer.WriteLine("/// <summary>");
 
             _writer.Write("/// ");
-            _writer.WriteLine(commandInfo.Comment.Replace("\n", "<br />"));
+            _writer.WriteLine(EscapeForDocumentation(commandInfo.Comment));
 
             _writer.WriteLine("/// </summary>");
         }
