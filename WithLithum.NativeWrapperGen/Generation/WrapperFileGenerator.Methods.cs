@@ -7,8 +7,10 @@ public partial class WrapperFileGenerator
     private const string HashValueFieldTemplate = "NWG_{0}_Value";
     private const string ShimVariableTemplate = "NWG_{0}_shim";
 
-    internal void WriteDocumentation(string hash, ScriptCommandInfo commandInfo)
+    internal void WriteDocumentation(WrapperEmitContext context)
     {
+        var commandInfo = context.CommandInfo;
+
         // Summary
         if (!string.IsNullOrWhiteSpace(commandInfo.Comment))
         {
@@ -28,7 +30,7 @@ public partial class WrapperFileGenerator
             _writer.Write("\">An instance of <c>");
             _writer.Write(param.Type.ToString());
             _writer.Write("</c> as represented in CLR type <c>");
-            _writer.Write(GetStringForType(commandInfo.ReturnType));
+            _writer.Write(context.ReturnTypeString);
             _writer.WriteLine("</c>.</param>");
         }
 
@@ -40,7 +42,7 @@ public partial class WrapperFileGenerator
         _writer.WriteLine("<br />");
 
         _writer.Write("/// <b>PC Hash</b>: ");
-        _writer.Write(hash);
+        _writer.Write(context.Hash);
         _writer.WriteLine("<br />");
 
         _writer.WriteLine("/// </remarks>");
@@ -49,22 +51,22 @@ public partial class WrapperFileGenerator
         _writer.Write("/// <returns>An instance of <c>");
         _writer.Write(commandInfo.ReturnType.ToString());
         _writer.Write("</c> as represented in CLR type <c>");
-        _writer.Write(GetStringForType(commandInfo.ReturnType));
+        _writer.Write(context.ReturnTypeString);
         _writer.WriteLine("</c>.</returns>");
     }
 
-    internal void WriteHashDefinition(string hash)
+    internal void WriteHashDefinition(WrapperEmitContext context)
     {
         _writer.Write("private static readonly global::GTA.Native.Hash ");
-        _writer.Write(HashValueFieldTemplate, MethodNameConverter.HashToMethodName(hash));
+        _writer.Write(HashValueFieldTemplate, context.SymbolNameHash);
         _writer.Write(" = (global::GTA.Native.Hash)");
-        _writer.Write(hash);
+        _writer.Write(context.Hash);
         _writer.WriteLine(';');
     }
 
-    internal void WriteWrapperBodyNoPointer(string hash, ScriptCommandInfo commandInfo)
+    internal void WriteWrapperBodyNoPointer(WrapperEmitContext context)
     {
-        var returnTypeName = GetStringForType(commandInfo.ReturnType);
+        var commandInfo = context.CommandInfo;
 
         _writer.WriteLine("{");
 
@@ -78,13 +80,13 @@ public partial class WrapperFileGenerator
         if (commandInfo.ReturnType != ScriptCommandReturnType.Void)
         {
             _writer.Write('<');
-            _writer.Write(returnTypeName);
+            _writer.Write(context.ReturnTypeString);
             _writer.Write(">");
         }
 
         _writer.Write('(');
 
-        _writer.Write(HashValueFieldTemplate, MethodNameConverter.HashToMethodName(hash));
+        _writer.Write(HashValueFieldTemplate, context.SymbolNameHash);
 
         foreach (var param in commandInfo.Parameters)
         {
@@ -97,14 +99,12 @@ public partial class WrapperFileGenerator
         _writer.WriteLine('}');
     }
 
-    internal void WriteWrapperBodyWithPointer(string hash, ScriptCommandInfo commandInfo)
+    internal void WriteWrapperBodyWithPointer(WrapperEmitContext context)
     {
-        var returnTypeName = GetStringForType(commandInfo.ReturnType);
-
         _writer.WriteLine("{");
 
         // Generate ref shim variables
-        foreach (var param in commandInfo.Parameters
+        foreach (var param in context.CommandInfo.Parameters
             .Where(x => ParamUtil.IsPointerType(x.Type)))
         {
             var shimName = string.Format(ShimVariableTemplate, param.Name);
@@ -117,34 +117,36 @@ public partial class WrapperFileGenerator
         }
 
         // Create return type variable if necessary
-        if (commandInfo.ReturnType != ScriptCommandReturnType.Void)
+        if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
         {
-            _writer.WriteLine("{0} NWG_retval;", returnTypeName);
+            _writer.WriteLine("{0} NWG_retval;", context.ReturnTypeString);
         }
 
         // Generate call body
         _writer.WriteLine("unsafe {");
 
         // Store return value in variable
-        if (commandInfo.ReturnType != ScriptCommandReturnType.Void)
+        if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
         {
             _writer.Write("NWG_retval = ");
         }
 
         _writer.Write("global::GTA.Native.Function.Call");
 
-        if (commandInfo.ReturnType != ScriptCommandReturnType.Void)
+        if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
         {
             _writer.Write('<');
-            _writer.Write(returnTypeName);
+            _writer.Write(context.ReturnTypeString);
             _writer.Write('>');
         }
 
         _writer.Write('('); // begin arguments
-        _writer.Write(HashValueFieldTemplate, MethodNameConverter.HashToMethodName(hash));
+        _writer.Write(HashValueFieldTemplate, context.SymbolNameHash);
 
-        foreach (var param in commandInfo.Parameters)
+        // Use 'for' loop for speed.
+        for (int i = 0; i < context.CommandInfo.Parameters.Count; i++)
         {
+            ScriptCommandParameterInfo param = context.CommandInfo.Parameters[i];
             _writer.Write(',');
             _writer.Write(' ');
             if (ParamUtil.IsPointerType(param.Type))
@@ -162,7 +164,7 @@ public partial class WrapperFileGenerator
         _writer.WriteLine('}'); // end unsafe
 
         // Assign shims values back to their ref fields
-        foreach (var param in commandInfo.Parameters
+        foreach (var param in context.CommandInfo.Parameters
             .Where(x => ParamUtil.IsPointerType(x.Type)))
         {
             _writer.Write(ParamUtil.EscapeName(param.Name));
@@ -172,7 +174,7 @@ public partial class WrapperFileGenerator
         }
 
         // Return retVal
-        if (commandInfo.ReturnType != ScriptCommandReturnType.Void)
+        if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
         {
             _writer.Write("return NWG_retval;");
         }
@@ -180,16 +182,18 @@ public partial class WrapperFileGenerator
         _writer.WriteLine('}'); // end block
     }
 
-    internal void WriteMethodSignature(string hash, ScriptCommandInfo commandInfo)
+    internal void WriteMethodSignature(WrapperEmitContext context)
     {
+        var commandInfo = context.CommandInfo;
+
         // Write beginning
         _writer.Write(_settings.Accessibility);
         _writer.Write(" static ");
-        _writer.Write(GetStringForType(commandInfo.ReturnType));
+        _writer.Write(context.ReturnTypeString);
         _writer.Write(' ');
         _writer.Write(commandInfo.Name != null
             ? MethodNameConverter.SnakeToPascal(commandInfo.Name)
-            : MethodNameConverter.HashToMethodName(hash));
+            : context.SymbolNameHash);
         _writer.Write('(');
 
         // Write parameters
@@ -214,27 +218,29 @@ public partial class WrapperFileGenerator
         _writer.Write(')');
     }
 
-    internal void WriteWrapperMethod(string hash, ScriptCommandInfo commandInfo)
+    internal void WriteWrapperMethod(WrapperEmitContext context)
     {
-        var paramsHasPointer = commandInfo.Parameters.Any(x => ParamUtil.IsPointerType(x.Type));
+        var commandInfo = context.CommandInfo;
+
+        var paramsHasPointer = context.CommandInfo.Parameters.Any(x => ParamUtil.IsPointerType(x.Type));
 
         _writer.WriteLine();
         _writer.WriteLine("// ---------------------------------------------------");
-        _writer.WriteLine("// {0}", commandInfo.Name ?? hash);
+        _writer.WriteLine("// {0}", commandInfo.Name ?? context.Hash);
         _writer.WriteLine("// ---------------------------------------------------");
         _writer.WriteLine();
 
-        WriteHashDefinition(hash);
-        WriteDocumentation(hash, commandInfo);
-        WriteMethodSignature(hash, commandInfo);
+        WriteHashDefinition(context);
+        WriteDocumentation(context);
+        WriteMethodSignature(context);
         
         if (paramsHasPointer)
         {
-            WriteWrapperBodyWithPointer(hash, commandInfo);
+            WriteWrapperBodyWithPointer(context);
         }
         else
         {
-            WriteWrapperBodyNoPointer(hash, commandInfo);
+            WriteWrapperBodyNoPointer(context);
         }
     }
 

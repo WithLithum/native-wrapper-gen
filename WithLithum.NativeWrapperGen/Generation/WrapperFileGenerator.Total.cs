@@ -14,6 +14,17 @@ partial class WrapperFileGenerator
         _settings = settings;
     }
 
+    internal WrapperEmitContext CreateContext(string hash, ScriptCommandInfo commandInfo)
+    {
+        return new WrapperEmitContext
+        {
+            Hash = hash,
+            SymbolNameHash = MethodNameConverter.HashToMethodName(hash),
+            CommandInfo = commandInfo,
+            ReturnTypeString = GetStringForType(commandInfo.ReturnType)
+        };
+    }
+
     public void WritePartial(string nameSpace,
         string className,
         IReadOnlyDictionary<string, ScriptCommandInfo> partial)
@@ -25,7 +36,7 @@ partial class WrapperFileGenerator
 
         foreach (var command in partial)
         {
-            WriteWrapperMethod(command.Key, command.Value);
+            WriteWrapperMethod(CreateContext(command.Key, command.Value));
         }
 
         WriteScopeFooter(); // end class
