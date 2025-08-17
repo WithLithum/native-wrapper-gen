@@ -1,20 +1,32 @@
 # Native Wrapper Generator
 
-The improved piece of software that generates native wrappers for [Script Hook V .NET](https://github.com/scripthookvdotnet/scripthookvdotnet) (SHVDN).
+Generates native function wrappers for [Community Script Hook V .NET](https://github.com/scripthookvdotnet/scripthookvdotnet).
 
-Improvements over the [generator used for NativeFx.Interop](https://github.com/NativeFx/InteropGenerator) that was written all the way back 3 years ago includes faster generation speed (the actual generator cost less than half a second and the whole process only takes a few seconds), generated code compiles without `<LangVersion>latest</LangVersion>`, and the usage of pre-cached `Hash` casted instances. Release and NativeAOT builds are even faster.
+Compared to the [old generator](https://github.com/NativeFx/InteropGenerator) that was written all the way back 3 years ago, this new generator:
+
+* runs faster (the actual generator cost less than half a second, and the process only takes a few seconds)
+* generates code that compiles without `<LangVersion>latest</LangVersion>`
+* pre-cached `Hash` instances eliminating the need to cast at runtime
 
 ## Usage
 
 ### Synopsis
 
-> WithLithum.NativeWrapperGen [--natives-file *natives-json-file*] [--config-file *config-json-file*] [--file-name-format *file-name-format*] [--namespace *namespace*] [--class-name *class-name*] [--count-time]
+```shell
+WithLithum.NativeWrapperGen
+  [--natives-file <natives-json-file>]
+  [--config-file <config-json-file>]
+  [--file-name-format <file-name-format>]
+  [--namespace <namespace>]
+  [--class-name <class-name>]
+  [--count-time]
+```
 
 ### Options
 
 * **natives-file**: `--natives-file <natives-json-file>`
   
-  Specifies a natives.json file. The file must be conforming to the format as provided in the [alloc8or nativedb-data](https://github.com/alloc8or/gta5-nativedb-data).
+  Specifies a `natives.json` file. The file must be conforming to the format as provided in the [`alloc8or nativedb-data`](https://github.com/alloc8or/gta5-nativedb-data).
 
   Defaults to the bundled data file.
 
