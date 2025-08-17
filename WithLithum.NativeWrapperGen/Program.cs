@@ -33,8 +33,8 @@ var optNameFormat = new Option<string>("--file-name-format",
     () => defaultFileNameFormat,
     description: "The format of the file name. '{0}' will become the natives namespace name.");
 
-var optNameSpace = new Option<string>("--namespace", 
-    () => defaultNameSpace, 
+var optNameSpace = new Option<string>("--namespace",
+    () => defaultNameSpace,
     description: "The natives file namespace.");
 var optClassName = new Option<string>("--class-name",
     () => defaultClassName,

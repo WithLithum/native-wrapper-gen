@@ -20,6 +20,7 @@ public partial class WrapperFileGenerator
 {
     private const string HashValueFieldTemplate = "NWG_{0}_Value";
     private const string ShimVariableTemplate = "NWG_{0}_shim";
+    private const string ReturnValueVariable = "NWG_return_value";
 
     private static string EscapeForDocumentation(string comment)
     {
@@ -32,7 +33,7 @@ public partial class WrapperFileGenerator
         return sb.ToString();
     }
 
-    internal void WriteDocumentation(WrapperEmitContext context)
+    private void WriteDocumentation(WrapperEmitContext context)
     {
         var commandInfo = context.CommandInfo;
 
@@ -80,7 +81,7 @@ public partial class WrapperFileGenerator
         _writer.WriteLine("</c>.</returns>");
     }
 
-    internal void WriteHashDefinition(WrapperEmitContext context)
+    private void WriteHashDefinition(WrapperEmitContext context)
     {
         _writer.Write("private static readonly global::GTA.Native.Hash ");
         _writer.Write(HashValueFieldTemplate, context.SymbolNameHash);
@@ -89,7 +90,7 @@ public partial class WrapperFileGenerator
         _writer.WriteLine(';');
     }
 
-    internal void WriteWrapperBodyNoPointer(WrapperEmitContext context)
+    private void WriteWrapperBodyNoPointer(WrapperEmitContext context)
     {
         var commandInfo = context.CommandInfo;
 
@@ -124,8 +125,13 @@ public partial class WrapperFileGenerator
         _writer.WriteLine('}');
     }
 
-    internal void WriteWrapperBodyWithPointer(WrapperEmitContext context)
+    private void WriteWrapperBodyWithPointer(WrapperEmitContext context)
     {
+        if (_writer == null)
+        {
+            throw new InvalidOperationException("Writer not yet initialized.");
+        }
+
         _writer.WriteLine("{");
 
         // Generate ref shim variables
@@ -144,7 +150,9 @@ public partial class WrapperFileGenerator
         // Create return type variable if necessary
         if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
         {
-            _writer.WriteLine("{0} NWG_retval;", context.ReturnTypeString);
+            _writer.WriteLine("{0} {1};",
+                context.ReturnTypeString,
+                ReturnValueVariable);
         }
 
         // Generate call body
@@ -153,7 +161,7 @@ public partial class WrapperFileGenerator
         // Store return value in variable
         if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
         {
-            _writer.Write("NWG_retval = ");
+            _writer.Write("{0} = ", ReturnValueVariable);
         }
 
         _writer.Write("global::GTA.Native.Function.Call");
@@ -169,9 +177,10 @@ public partial class WrapperFileGenerator
         _writer.Write(HashValueFieldTemplate, context.SymbolNameHash);
 
         // Use 'for' loop for speed.
-        for (int i = 0; i < context.CommandInfo.Parameters.Count; i++)
+        // ReSharper disable once ForCanBeConvertedToForeach
+        for (var i = 0; i < context.CommandInfo.Parameters.Count; i++)
         {
-            ScriptCommandParameterInfo param = context.CommandInfo.Parameters[i];
+            var param = context.CommandInfo.Parameters[i];
             _writer.Write(',');
             _writer.Write(' ');
             if (ParamUtil.IsPointerType(param.Type))
@@ -201,13 +210,13 @@ public partial class WrapperFileGenerator
         // Return retVal
         if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
         {
-            _writer.Write("return NWG_retval;");
+            _writer.Write("return {0};", ReturnValueVariable);
         }
 
         _writer.WriteLine('}'); // end block
     }
 
-    internal void WriteMethodSignature(WrapperEmitContext context)
+    private void WriteMethodSignature(WrapperEmitContext context)
     {
         var commandInfo = context.CommandInfo;
 
@@ -243,7 +252,7 @@ public partial class WrapperFileGenerator
         _writer.Write(')');
     }
 
-    internal void WriteWrapperMethod(WrapperEmitContext context)
+    private void WriteWrapperMethod(WrapperEmitContext context)
     {
         var commandInfo = context.CommandInfo;
 
@@ -269,30 +278,28 @@ public partial class WrapperFileGenerator
         }
     }
 
-    internal string GetStringForType(ScriptCommandParameterType paramType,
-        bool stripRef = false)
+    private string GetStringForType(ScriptCommandParameterType paramType, bool stripRef = false)
     {
-        if (stripRef
-            && ParamUtil.PointerToRegularMap.TryGetValue(paramType, out var resultType))
+        while (true)
         {
-            return GetStringForType(resultType, false);
-        }
+            // ReSharper disable once InvertIf
+            if (stripRef && ParamUtil.PointerToRegularMap.TryGetValue(paramType, out var resultType))
+            {
+                paramType = resultType;
+                stripRef = false;
+                continue;
+            }
 
-        if (_settings.ParameterTypes.TryGetValue(paramType, out var writeType))
-        {
-            return writeType;
+            return _settings.ParameterTypes.TryGetValue(paramType, out var writeType)
+                ? writeType
+                : paramType.ToString();
         }
-
-        return paramType.ToString();
     }
 
-    internal string GetStringForType(ScriptCommandReturnType returnType)
+    private string GetStringForType(ScriptCommandReturnType returnType)
     {
-        if (_settings.ReturnTypes.TryGetValue(returnType, out var writeType))
-        {
-            return writeType;
-        }
-
-        return returnType.ToString();
+        return _settings.ReturnTypes.TryGetValue(returnType, out var writeType)
+            ? writeType
+            : returnType.ToString();
     }
 }

@@ -20,7 +20,7 @@ using SCPT = Models.ScriptCommandParameterType;
 internal static class ParamUtil
 {
     internal static readonly ReadOnlyDictionary<SCPT, SCPT> PointerToRegularMap =
-    new Dictionary<SCPT, SCPT>()
+    new Dictionary<SCPT, SCPT>
     {
         { SCPT.FireIdPointer, SCPT.FireId },
         { SCPT.IntPointer, SCPT.Int },

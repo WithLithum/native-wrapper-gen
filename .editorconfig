@@ -1,0 +1,3 @@
+[*.cs]
+resharper_qualified_using_at_nested_scope = true
+resharper_add_imports_to_deepest_scope = true

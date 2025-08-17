@@ -57,7 +57,7 @@ public class CommandParameterTypeConverter : JsonConverter<ScriptCommandParamete
         string? str = reader.GetString();
         if (string.IsNullOrWhiteSpace(str))
         {
-            throw new JsonException($"Expected string but found null, empty or whitespace");
+            throw new JsonException("Expected string but found null, empty or whitespace");
         }
 
         if (SpecialTreatmentStrings.TryGetValue(str, out var specialValue))

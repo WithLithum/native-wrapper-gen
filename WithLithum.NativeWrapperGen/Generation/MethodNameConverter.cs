@@ -45,7 +45,7 @@ public static class MethodNameConverter
 
             // Transform the character to write.
 
-            char writeCh = ch;
+            char writeCh;
 
             if (isCaptialize)
             {
