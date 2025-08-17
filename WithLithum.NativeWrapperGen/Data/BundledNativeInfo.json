@@ -1,5 +1,5 @@
 {
-	"SYSTEM": {
+	"BUILTIN": {
 		"0x4EDE34FBADD967A6": {
 			"name": "WAIT",
 			"jhash": "0x7715C03B",
@@ -3015,7 +3015,7 @@
 					"name": "out2"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "out3"
 				}
 			],
@@ -3313,7 +3313,7 @@
 		"0x3CDC1E622CCE0356": {
 			"name": "OVERRIDE_VEH_HORN",
 			"jhash": "0x2ACAB783",
-			"comment": "Overrides the vehicle's horn hash.\nWhen changing this hash on a vehicle, it will not return the 'overwritten' hash. It will still always return the default horn hash (same as GET_VEHICLE_DEFAULT_HORN)\n\nvehicle - the vehicle whose horn should be overwritten\nmute - p1 seems to be an option for muting the horn\np2 - maybe a horn id, since the function AUDIO::GET_VEHICLE_DEFAULT_HORN(veh) exists?",
+			"comment": "Overrides the vehicle's horn hash.\nWhen changing this hash on a vehicle, it will not return the 'overwritten' hash. It will still always return the default horn hash (same as GET_VEHICLE_DEFAULT_HORN)\n\nvehicle - the vehicle whose horn should be overwritten",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -3373,7 +3373,7 @@
 		"0x58BB377BEC7CD5F4": {
 			"name": "SET_VEHICLE_CONVERSATIONS_PERSIST",
 			"jhash": "0x8CE63FA1",
-			"comment": "SET_VEHICLE_CONVERSATIONS_PERSIST?",
+			"comment": "",
 			"params": [
 				{
 					"type": "BOOL",
@@ -4193,7 +4193,7 @@
 		"0xBAC7FC81A75EC1A1": {
 			"name": "STOP_AUDIO_SCENES",
 			"jhash": "0xF6C7342A",
-			"comment": "??",
+			"comment": "",
 			"params": [],
 			"return_type": "void",
 			"build": "323"
@@ -4882,6 +4882,31 @@
 			"return_type": "void",
 			"build": "323"
 		},
+		"0xC9D623C5A3D8FD5D": {
+			"name": "SET_INDIVIDUAL_PORTAL_SETTINGS_OVERRIDE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Hash",
+					"name": "interiorNameHash"
+				},
+				{
+					"type": "int",
+					"name": "roomIndex"
+				},
+				{
+					"type": "int",
+					"name": "doorIndex"
+				},
+				{
+					"type": "const char*",
+					"name": "newPortalSettingsName"
+				}
+			],
+			"return_type": "void",
+			"build": "3570"
+		},
 		"0xB4BBFD9CD8B3922B": {
 			"name": "REMOVE_PORTAL_SETTINGS_OVERRIDE",
 			"jhash": "0xD24B4D0C",
@@ -4895,10 +4920,31 @@
 			"return_type": "void",
 			"build": "323"
 		},
+		"0x8EF105736194F80C": {
+			"name": "REMOVE_INDIVIDUAL_PORTAL_SETTINGS_OVERRIDE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Hash",
+					"name": "interiorNameHash"
+				},
+				{
+					"type": "int",
+					"name": "roomIndex"
+				},
+				{
+					"type": "int",
+					"name": "doorIndex"
+				}
+			],
+			"return_type": "void",
+			"build": "3570"
+		},
 		"0xE4E6DD5566D28C82": {
 			"name": "STOP_SMOKE_GRENADE_EXPLOSION_SOUNDS",
 			"jhash": "0x7262B5BA",
-			"comment": "STOP_S[MOKE_GRENADE_EXPLOSION_SOUNDS]?",
+			"comment": "",
 			"params": [],
 			"return_type": "void",
 			"build": "323"
@@ -9558,27 +9604,27 @@
 			"comment": "Gets system time as year, month, day, hour, minute and second.\n\nExample usage:\n\n    int year;\n int month;\n    int day;\n  int hour;\n int minute;\n   int second;\n\n TIME::GET_POSIX_TIME(&year, &month, &day, &hour, &minute, &second);\n",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "year"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "month"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "day"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "hour"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "minute"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "second"
 				}
 			],
@@ -9591,27 +9637,27 @@
 			"comment": "Gets current UTC time",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "year"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "month"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "day"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "hour"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "minute"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "second"
 				}
 			],
@@ -9628,27 +9674,27 @@
 			"comment": "Gets local system time as year, month, day, hour, minute and second.\n\nExample usage:\n\nint year;\nint month;\nint day;\nint hour;\nint minute;\nint second;\nor use std::tm struct\n\nTIME::GET_LOCAL_TIME(&year, &month, &day, &hour, &minute, &second);\n",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "year"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "month"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "day"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "hour"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "minute"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "second"
 				}
 			],
@@ -9820,6 +9866,23 @@
 			],
 			"return_type": "void",
 			"build": "323"
+		},
+		"0x1FA904B60E492336": {
+			"name": "GET_CUT_FILE_OFFSET",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "const char*",
+					"name": "cutsceneName"
+				},
+				{
+					"type": "int",
+					"name": "index"
+				}
+			],
+			"return_type": "Vector3",
+			"build": "3570"
 		},
 		"0x0ABC54DE641DC0FC": {
 			"name": "GET_CUT_FILE_CONCAT_COUNT",
@@ -10319,11 +10382,11 @@
 		"0x2F137B508DE238F2": {
 			"name": "NETWORK_SET_MOCAP_CUTSCENE_CAN_BE_SKIPPED",
 			"jhash": "0x8338DA1D",
-			"comment": "Stops current cutscene with a fade transition\np0: always true in R* Scripts\nYou will need to manually fade the screen back in\nSET_CUTSCENE_INPUTS_PARTIALLY_FADE?",
+			"comment": "",
 			"params": [
 				{
 					"type": "BOOL",
-					"name": "p0"
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -13305,7 +13368,7 @@
 		"0x1218E6886D3D8327": {
 			"name": "IS_ENTITY_STATIC",
 			"jhash": "0x928E12E9",
-			"comment": "a static ped will not react to natives like \"APPLY_FORCE_TO_ENTITY\" or \"SET_ENTITY_VELOCITY\" and oftentimes will not react to task-natives like \"TASK::TASK_COMBAT_PED\". The only way I know of to make one of these peds react is to ragdoll them (or sometimes to use CLEAR_PED_TASKS_IMMEDIATELY(). Static peds include almost all far-away peds, beach-combers, peds in certain scenarios, peds crossing a crosswalk, peds walking to get back into their cars, and others. If anyone knows how to make a ped non-static without ragdolling them, please edit this with the solution.\n\nhow can I make an entity static???",
+			"comment": "a static ped will not react to natives like \"APPLY_FORCE_TO_ENTITY\" or \"SET_ENTITY_VELOCITY\" and oftentimes will not react to task-natives like \"TASK::TASK_COMBAT_PED\". The only way I know of to make one of these peds react is to ragdoll them (or sometimes to use CLEAR_PED_TASKS_IMMEDIATELY(). Static peds include almost all far-away peds, beach-combers, peds in certain scenarios, peds crossing a crosswalk, peds walking to get back into their cars, and others. If anyone knows how to make a ped non-static without ragdolling them, please edit this with the solution.",
 			"params": [
 				{
 					"type": "Entity",
@@ -14213,7 +14276,7 @@
 		"0x43D3807C077261E3": {
 			"name": "STOP_SYNCHRONIZED_ENTITY_ANIM",
 			"jhash": "0xE27D2FC1",
-			"comment": "p1 sync task id?",
+			"comment": "",
 			"params": [
 				{
 					"type": "Entity",
@@ -16153,7 +16216,7 @@
 			"build": "323"
 		}
 	},
-	"FILES": {
+	"EXTRAMETADATA": {
 		"0x278F76C3B0A8F109": {
 			"name": "GET_NUM_TATTOO_SHOP_DLC_ITEMS",
 			"jhash": "0x71D0CF3E",
@@ -16493,11 +16556,11 @@
 					"name": "nameHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "enumValue"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "componentType"
 				}
 			],
@@ -16522,11 +16585,11 @@
 					"name": "nameHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "enumValue"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "anchorPoint"
 				}
 			],
@@ -16583,11 +16646,11 @@
 					"name": "nameHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "enumValue"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "componentType"
 				}
 			],
@@ -16612,11 +16675,11 @@
 					"name": "nameHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "enumValue"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "anchorPoint"
 				}
 			],
@@ -17589,6 +17652,23 @@
 				"_GET_PED_INSIDE_EXPLOSION_AREA",
 				"_GET_ENTITY_INSIDE_EXPLOSION_AREA"
 			]
+		},
+		"0x5241DB47A8B8AD54": {
+			"name": "_NETWORK_EXPECT_EXPLOSION_EVENTS_FOR_PLAYER",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "BOOL",
+					"name": "expect"
+				},
+				{
+					"type": "Player",
+					"name": "player"
+				}
+			],
+			"return_type": "void",
+			"build": "3570"
 		}
 	},
 	"GRAPHICS": {
@@ -20315,7 +20395,7 @@
 		"0x845BAD77CC770633": {
 			"name": "ATTACH_TV_AUDIO_TO_ENTITY",
 			"jhash": "0x784944DB",
-			"comment": "Might be more appropriate in AUDIO?",
+			"comment": "",
 			"params": [
 				{
 					"type": "Entity",
@@ -20423,11 +20503,11 @@
 			"comment": "int screenresx,screenresy;\nGET_SCREEN_RESOLUTION(&screenresx,&screenresy);",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "x"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "y"
 				}
 			],
@@ -20440,11 +20520,11 @@
 			"comment": "Returns current screen resolution.",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "x"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "y"
 				}
 			],
@@ -20997,7 +21077,7 @@
 		"0x6D955F6A9E0295B1": {
 			"name": "GRASSBATCH_ENABLE_FLATTENING_IN_SPHERE",
 			"jhash": "",
-			"comment": "Wraps 0xAAE9BE70EC7C69AB with FLT_MAX as p7, Jenkins: 0x73E96210?",
+			"comment": "Wraps 0xAAE9BE70EC7C69AB with FLT_MAX as p7",
 			"params": [
 				{
 					"type": "float",
@@ -24112,7 +24192,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				}
 			],
@@ -24705,7 +24785,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "scaleformHandle"
 				},
 				{
@@ -24777,7 +24857,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "scaleformHandle"
 				}
 			],
@@ -25506,7 +25586,7 @@
 		"0xAE4E8157D9ECF087": {
 			"name": "END_TEXT_COMMAND_UNPARSED_SCALEFORM_STRING",
 			"jhash": "0x2E80DB52",
-			"comment": "Same as END_TEXT_COMMAND_SCALEFORM_STRING but does not perform HTML conversion for text tokens.\n\nEND_TEXT_COMMAND_VIA_SPECIAL_MODIFIABLE_STRING?",
+			"comment": "Same as END_TEXT_COMMAND_SCALEFORM_STRING but does not perform HTML conversion for text tokens.",
 			"params": [],
 			"return_type": "void",
 			"build": "323",
@@ -25786,7 +25866,7 @@
 		"0xEE831F15A8D0D94A": {
 			"name": "_SET_TV_CHANNEL_PLAYLIST_DIRTY",
 			"jhash": "",
-			"comment": "",
+			"comment": "Does not actually return anything.",
 			"params": [
 				{
 					"type": "int",
@@ -25797,7 +25877,7 @@
 					"name": "p1"
 				}
 			],
-			"return_type": "void",
+			"return_type": "Any",
 			"build": "3095"
 		},
 		"0xBEB3D46BB7F043C0": {
@@ -27093,7 +27173,7 @@
 					"name": "p1"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p2"
 				},
 				{
@@ -27146,7 +27226,7 @@
 					"name": "p1"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p2"
 				},
 				{
@@ -28654,19 +28734,19 @@
 					"name": "hudColorIndex"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "r"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "g"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "b"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "a"
 				}
 			],
@@ -30984,7 +31064,7 @@
 		"0xA17784FCA9548D15": {
 			"name": "SET_FAKE_GPS_PLAYER_POSITION_THIS_FRAME",
 			"jhash": "",
-			"comment": "p2 maybe z float?",
+			"comment": "",
 			"params": [
 				{
 					"type": "float",
@@ -30995,8 +31075,8 @@
 					"name": "y"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "float",
+					"name": "z"
 				}
 			],
 			"return_type": "void",
@@ -33748,11 +33828,11 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "lastItemMenuId"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "selectedItemUniqueId"
 				}
 			],
@@ -33768,15 +33848,15 @@
 			"comment": "lastItemMenuId: this is the menuID of the last selected item minus 1000 (lastItem.menuID - 1000)\nselectedItemMenuId: same as lastItemMenuId except for the currently selected menu item\nselectedItemUniqueId: this is uniqueID of the currently selected menu item\n\nwhen the pausemenu is closed:\nlastItemMenuId = -1\nselectedItemMenuId = -1\nselectedItemUniqueId = 0\n\nwhen the header gains focus:\nlastItemMenuId updates as normal or 0 if the pausemenu was just opened\nselectedItemMenuId becomes a unique id for the pausemenu page that focus was taken from (?) or 0 if the pausemenu was just opened\nselectedItemUniqueId = -1\n\nwhen focus is moved from the header to a pausemenu page:\nlastItemMenuId becomes a unique id for the pausemenu page that focus was moved to (?)\nselectedItemMenuId = -1\nselectedItemUniqueId updates as normal",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "lastItemMenuId"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "selectedItemMenuId"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "selectedItemUniqueId"
 				}
 			],
@@ -33792,15 +33872,15 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "r"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "g"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "b"
 				}
 			],
@@ -33858,7 +33938,7 @@
 					"name": "statHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outValue"
 				},
 				{
@@ -35335,7 +35415,7 @@
 			"build": "323"
 		}
 	},
-	"LOADINGSCREEN": {
+	"LOBBY": {
 		"0xF2CA003F167E21D2": {
 			"name": "LOBBY_AUTO_MULTIPLAYER_MENU",
 			"jhash": "0x106C8317",
@@ -36978,7 +37058,7 @@
 			"comment": "This sets bit [offset] of [address] to on.\n\nThe offsets used are different bits to be toggled on and off, typically there is only one address used in a script.\n\nExample:\nMISC::SET_BIT(&bitAddress, 1);\n\nTo check if this bit has been enabled:\nMISC::IS_BIT_SET(bitAddress, 1); // will return 1 afterwards\n\nPlease note, this method may assign a value to [address] when used.",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "address"
 				},
 				{
@@ -36995,7 +37075,7 @@
 			"comment": "This sets bit [offset] of [address] to off.\n\nExample:\nMISC::CLEAR_BIT(&bitAddress, 1);\n\nTo check if this bit has been enabled:\nMISC::IS_BIT_SET(bitAddress, 1); // will return 0 afterwards",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "address"
 				},
 				{
@@ -39224,6 +39304,14 @@
 			"return_type": "BOOL",
 			"build": "2545"
 		},
+		"0xE2BCD0EFAE90D1F4": {
+			"name": "_IS_XBOXPC_VERSION",
+			"jhash": "",
+			"comment": "",
+			"params": [],
+			"return_type": "BOOL",
+			"build": "3504"
+		},
 		"0x9F1935CA1F724008": {
 			"name": "IS_AUSSIE_VERSION",
 			"jhash": "0x944BA1DC",
@@ -39311,7 +39399,7 @@
 					"name": "string"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outInteger"
 				}
 			],
@@ -39324,7 +39412,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "var"
 				},
 				{
@@ -40185,7 +40273,7 @@
 					"name": "radius"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outIncidentID"
 				},
 				{
@@ -40222,7 +40310,7 @@
 					"name": "radius"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outIncidentID"
 				},
 				{
@@ -40240,7 +40328,7 @@
 		"0x556C1AA270D5A207": {
 			"name": "DELETE_INCIDENT",
 			"jhash": "0x212BD0DC",
-			"comment": "Delete an incident with a given id.\n\n=======================================================\nCorrection, I have change this to int, instead of ref int\nas it doesn't use a pointer to the createdIncident.\nIf you try it you will crash (or) freeze.\n=======================================================",
+			"comment": "Delete an incident with a given id.\n\n=======================================================\nCorrection, I have change this to int, instead of int*\nas it doesn't use a pointer to the createdIncident.\nIf you try it you will crash (or) freeze.\n=======================================================",
 			"params": [
 				{
 					"type": "int",
@@ -40253,7 +40341,7 @@
 		"0xC8BC6461E629BEAA": {
 			"name": "IS_INCIDENT_VALID",
 			"jhash": "0x31FD0BA4",
-			"comment": "=======================================================\nCorrection, I have change this to int, instead of ref int\nas it doesn't use a pointer to the createdIncident.\nIf you try it you will crash (or) freeze.\n=======================================================",
+			"comment": "=======================================================\nCorrection, I have change this to int, instead of int*\nas it doesn't use a pointer to the createdIncident.\nIf you try it you will crash (or) freeze.\n=======================================================",
 			"params": [
 				{
 					"type": "int",
@@ -41314,11 +41402,11 @@
 					"name": "player"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p1"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p2"
 				}
 			],
@@ -41974,7 +42062,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "renderId"
 				}
 			],
@@ -42322,7 +42410,7 @@
 					"name": "amount"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p3"
 				}
 			],
@@ -44316,11 +44404,11 @@
 			"comment": "This isn't a hash collision.",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p1"
 				},
 				{
@@ -50444,7 +50532,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "state"
 				}
 			],
@@ -50468,7 +50556,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				}
 			],
@@ -50505,7 +50593,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				}
 			],
@@ -50518,7 +50606,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				}
 			],
@@ -50615,7 +50703,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				},
 				{
@@ -50635,7 +50723,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "transactionId"
 				},
 				{
@@ -50747,13 +50835,26 @@
 				"_NETWORK_SHOP_CHECKOUT_START"
 			]
 		},
+		"0x4B64CD6D18474126": {
+			"name": "NET_GAMESERVER_CHECKOUT_PENDING",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "transactionId"
+				}
+			],
+			"return_type": "BOOL",
+			"build": "3570"
+		},
 		"0x3C5FD37B5499582E": {
 			"name": "NET_GAMESERVER_BEGIN_SERVICE",
 			"jhash": "",
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "transactionId"
 				},
 				{
@@ -51086,6 +51187,14 @@
 			"params": [],
 			"return_type": "BOOL",
 			"build": "323"
+		},
+		"0xA6BC0D9BCF9662FA": {
+			"name": "_NETWORK_MULTIPLAYER_CROSSPLAY_NOT_ALLOWED",
+			"jhash": "",
+			"comment": "For the XboxPC version this returns true if XPRIVILEGE_MULTIPLAYER_SESSIONS is granted but XPRIVILEGE_CROSS_PLAY is NOT granted.\nFor more information, see https://learn.microsoft.com/en-us/gaming/gdk/_content/gc/live/features/identity/privileges/concepts/live-user-privileges-client#privilege-ids-to-check\n\nAlways returns false for non-XboxPC versions.",
+			"params": [],
+			"return_type": "BOOL",
+			"build": "3504"
 		},
 		"0x1353F87E89946207": {
 			"name": "NETWORK_HAS_AGE_RESTRICTIONS",
@@ -51457,12 +51566,46 @@
 			"comment": "11 - Need to download tunables.\n12 - Need to download background script.\n\nReturns 1 if the multiplayer is loaded, otherwhise 0.",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "loadingState"
 				}
 			],
 			"return_type": "BOOL",
 			"build": "323"
+		},
+		"0x6FA9825D0B5A721B": {
+			"name": "NETWORK_CHECK_CAN_ACCESS_AND_ALERT",
+			"jhash": "",
+			"comment": "",
+			"params": [],
+			"return_type": "BOOL",
+			"build": "3570"
+		},
+		"0x967E6FB554E1B6DE": {
+			"name": "_NETWORK_GET_ACCESS_CODE_LABEL_HEADING",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "accessCode"
+				}
+			],
+			"return_type": "const char*",
+			"build": "3570"
+		},
+		"0x214CA1730793EBA8": {
+			"name": "_NETWORK_GET_ACCESS_CODE_LABEL_BODY",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "accessCode"
+				}
+			],
+			"return_type": "const char*",
+			"build": "3570"
 		},
 		"0x9747292807126EDA": {
 			"name": "NETWORK_IS_MULTIPLAYER_DISABLED",
@@ -51688,23 +51831,6 @@
 			],
 			"return_type": "BOOL",
 			"build": "3095"
-		},
-		"0xA02E59562D711006": {
-			"name": "NETWORK_SESSION_END",
-			"jhash": "0xBCACBEA2",
-			"comment": "p0 is always false and p1 varies.\nNETWORK_SESSION_END(0, 1)\nNETWORK_SESSION_END(0, 0)\nResults in: \"Connection to session lost due to an unknown network error. Please return to Grand Theft Auto V and try again later.\"",
-			"params": [
-				{
-					"type": "BOOL",
-					"name": "p0"
-				},
-				{
-					"type": "BOOL",
-					"name": "p1"
-				}
-			],
-			"return_type": "BOOL",
-			"build": "323"
 		},
 		"0xB9351A07A0D458B1": {
 			"name": "NETWORK_SESSION_LEAVE",
@@ -51980,7 +52106,7 @@
 			"comment": "..",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				},
 				{
@@ -52005,15 +52131,15 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "hours"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "minutes"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "seconds"
 				}
 			],
@@ -54543,7 +54669,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "vars"
 				},
 				{
@@ -54564,7 +54690,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "vars"
 				},
 				{
@@ -54628,6 +54754,110 @@
 			"params": [],
 			"return_type": "void",
 			"build": "323"
+		},
+		"0x72C8588ABE22C972": {
+			"name": "_NETWORK_GET_HOST_BROADCAST_DATA_SIZE_UNSYNCED",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Hash",
+					"name": "scriptNameHash"
+				},
+				{
+					"type": "int",
+					"name": "instance"
+				},
+				{
+					"type": "Hash",
+					"name": "positionHash"
+				},
+				{
+					"type": "int",
+					"name": "handlerNum"
+				}
+			],
+			"return_type": "int",
+			"build": "3586",
+			"unused": true
+		},
+		"0xB99CD664FD4720A1": {
+			"name": "_NETWORK_GET_PLAYER_BROADCAST_DATA_SIZE_UNSYNCED",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Hash",
+					"name": "scriptNameHash"
+				},
+				{
+					"type": "int",
+					"name": "instance"
+				},
+				{
+					"type": "Hash",
+					"name": "positionHash"
+				},
+				{
+					"type": "int",
+					"name": "handlerNum"
+				}
+			],
+			"return_type": "int",
+			"build": "3586",
+			"unused": true
+		},
+		"0xE448693B3EA3B92C": {
+			"name": "_NETWORK_GET_BROADCAST_DATA_HOST_UPDATE_SIZE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Hash",
+					"name": "scriptNameHash"
+				},
+				{
+					"type": "int",
+					"name": "instance"
+				},
+				{
+					"type": "Hash",
+					"name": "positionHash"
+				},
+				{
+					"type": "int",
+					"name": "handlerNum"
+				}
+			],
+			"return_type": "int",
+			"build": "3586",
+			"unused": true
+		},
+		"0xAC3F722321800755": {
+			"name": "_NETWORK_GET_BROADCAST_DATA_PLAYER_UPDATE_SIZE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Hash",
+					"name": "scriptNameHash"
+				},
+				{
+					"type": "int",
+					"name": "instance"
+				},
+				{
+					"type": "Hash",
+					"name": "positionHash"
+				},
+				{
+					"type": "int",
+					"name": "handlerNum"
+				}
+			],
+			"return_type": "int",
+			"build": "3586",
+			"unused": true
 		},
 		"0x5D10B3795F3FC886": {
 			"name": "NETWORK_HAS_RECEIVED_HOST_BROADCAST_DATA",
@@ -55019,7 +55249,7 @@
 					"name": "entity"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p2"
 				}
 			],
@@ -55043,7 +55273,7 @@
 					"name": "entity"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p2"
 				}
 			],
@@ -55910,7 +56140,7 @@
 					"name": "player"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "userID"
 				}
 			],
@@ -56212,9 +56442,9 @@
 			"build": "372"
 		},
 		"0xDBDF80673BBA3D65": {
-			"name": "_NETWORK_DOES_COMMUNICATION_GROUP_EXIST",
+			"name": "_NETWORK_DOES_COMMUNICATION_GROUP_HAVE_PERMISSION",
 			"jhash": "",
-			"comment": "communicationType: 0 = VOICE; 1 = TEXT_CHAT; 2 = TEXT_MESSAGE; 3 = EMAIL; 4 = USER_CONTENT;  5 = USER_TEXT",
+			"comment": "communicationType: 0 = VOICE; 1 = TEXT_CHAT; 2 = TEXT_MESSAGE; 3 = EMAIL; 4 = USER_CONTENT; 5 = USER_TEXT",
 			"params": [
 				{
 					"type": "int",
@@ -56222,7 +56452,23 @@
 				}
 			],
 			"return_type": "BOOL",
-			"build": "3095"
+			"build": "3095",
+			"old_names": [
+				"_NETWORK_DOES_COMMUNICATION_GROUP_EXIST"
+			]
+		},
+		"0x20C12650830A64EC": {
+			"name": "_NETWORK_DOES_COMMUNICATION_GROUP_HAVE_SETTINGS_ENABLED",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "communicationType"
+				}
+			],
+			"return_type": "BOOL",
+			"build": "3570"
 		},
 		"0x40DF02F371F40883": {
 			"name": "_NETWORK_GET_COMMUNICATION_GROUP_FLAGS",
@@ -56236,6 +56482,32 @@
 			],
 			"return_type": "int",
 			"build": "3095"
+		},
+		"0x97F35B898D2D067F": {
+			"name": "_NETWORK_GET_COMMUNICATION_GROUP_DEFAULT_FLAGS",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "communicationType"
+				}
+			],
+			"return_type": "int",
+			"build": "3570"
+		},
+		"0xBF66ACD9AE81A99F": {
+			"name": "_NETWORK_GET_COMMUNICATION_GROUP_VALUE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "communicationType"
+				}
+			],
+			"return_type": "int",
+			"build": "3570"
 		},
 		"0xE549F846DE7D32D5": {
 			"name": "_NETWORK_SET_COMMUNICATION_GROUP_FLAGS",
@@ -57398,7 +57670,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				}
 			],
@@ -57411,7 +57683,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				}
 			],
@@ -57424,7 +57696,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				},
 				{
@@ -57441,7 +57713,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				},
 				{
@@ -58639,11 +58911,11 @@
 		"0xC6FCEE21C6FCEE21": {
 			"name": "NETWORK_SET_TASK_CUTSCENE_INSCOPE_MULTIPLER",
 			"jhash": "",
-			"comment": "A value between 1.0 and 5.0\n\n_NETWORK_SET_TASK_CUTSCENE_PROXIMITY_SCALE?",
+			"comment": "A value between 1.0 and 5.0",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "float",
+					"name": "multiplier"
 				}
 			],
 			"return_type": "void",
@@ -59991,6 +60263,14 @@
 			"return_type": "void",
 			"build": "323"
 		},
+		"0xCBD02360C5E16871": {
+			"name": "NETWORK_SYNC_CLOCK_TIME_OVERRIDE",
+			"jhash": "",
+			"comment": "Does nothing in final builds.",
+			"params": [],
+			"return_type": "void",
+			"build": "3570"
+		},
 		"0xD7C95D322FF57522": {
 			"name": "NETWORK_IS_CLOCK_TIME_OVERRIDDEN",
 			"jhash": "0x2465296D",
@@ -60403,7 +60683,7 @@
 					"name": "tunableName"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "value"
 				}
 			],
@@ -60490,7 +60770,7 @@
 					"name": "tunableName"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "value"
 				}
 			],
@@ -60514,7 +60794,7 @@
 					"name": "nameHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "value"
 				}
 			],
@@ -60903,27 +61183,6 @@
 					"name": "netID"
 				}
 			],
-			"return_type": "void",
-			"build": "323"
-		},
-		"0x1775961C2FBBCB5C": {
-			"name": "NETWORK_SET_PROPERTY_ID",
-			"jhash": "0x5A74E873",
-			"comment": "value must be < 255",
-			"params": [
-				{
-					"type": "int",
-					"name": "id"
-				}
-			],
-			"return_type": "void",
-			"build": "323"
-		},
-		"0xC2B82527CA77053E": {
-			"name": "NETWORK_CLEAR_PROPERTY_ID",
-			"jhash": "0x38BC35C8",
-			"comment": "",
-			"params": [],
 			"return_type": "void",
 			"build": "323"
 		},
@@ -62954,7 +63213,7 @@
 					"name": "privilege"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "banType"
 				},
 				{
@@ -66720,7 +66979,7 @@
 		"0xADBE4809F19F927A": {
 			"name": "ONLY_CLEAN_UP_OBJECT_WHEN_OUT_OF_RANGE",
 			"jhash": "0x2048A7DD",
-			"comment": "is this like setting is as no longer needed?",
+			"comment": "",
 			"params": [
 				{
 					"type": "Object",
@@ -67724,6 +67983,14 @@
 			],
 			"return_type": "void",
 			"build": "323"
+		},
+		"0x18E474F40EF05F10": {
+			"name": "_GET_GAMEPAD_TYPE",
+			"jhash": "",
+			"comment": "Always returns zero.",
+			"params": [],
+			"return_type": "int",
+			"build": "3570"
 		}
 	},
 	"PATHFIND": {
@@ -68110,7 +68377,7 @@
 					"name": "outHeading"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outNumLanes"
 				},
 				{
@@ -68249,11 +68516,11 @@
 					"name": "z"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "density"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "flags"
 				}
 			],
@@ -68679,7 +68946,7 @@
 					"name": "outPosition"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "nodeId"
 				}
 			],
@@ -68716,7 +68983,7 @@
 					"name": "heading"
 				}
 			],
-			"return_type": "Vector3",
+			"return_type": "void",
 			"build": "2944"
 		},
 		"0x2EB41072B4C1E4C0": {
@@ -68770,7 +69037,7 @@
 					"name": "p3"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "direction"
 				},
 				{
@@ -70872,7 +71139,7 @@
 					"name": "ped"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outBone"
 				}
 			],
@@ -71259,7 +71526,7 @@
 					"name": "ped"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outTintIndex"
 				}
 			],
@@ -72594,7 +72861,7 @@
 					"name": "p1"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "sizeInMembers"
 				}
 			],
@@ -74505,15 +74772,15 @@
 					"name": "hairColorIndex"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outR"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outG"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outB"
 				}
 			],
@@ -74534,15 +74801,15 @@
 					"name": "makeupColorIndex"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outR"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outG"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outB"
 				}
 			],
@@ -78213,35 +78480,6 @@
 			"return_type": "void",
 			"build": "323"
 		},
-		"0x082D79E15302F0C2": {
-			"name": "IS_PED_IN_SPHERE_AREA_OF_ANY_ENEMY_PEDS",
-			"jhash": "",
-			"comment": "",
-			"params": [
-				{
-					"type": "Ped",
-					"name": "ped"
-				},
-				{
-					"type": "float",
-					"name": "x"
-				},
-				{
-					"type": "float",
-					"name": "y"
-				},
-				{
-					"type": "float",
-					"name": "z"
-				},
-				{
-					"type": "float",
-					"name": "range"
-				}
-			],
-			"return_type": "BOOL",
-			"build": "3407"
-		},
 		"0xC158D28142A34608": {
 			"name": "STOP_PED_WEAPON_FIRING_WHEN_DROPPED",
 			"jhash": "0x4AC3421E",
@@ -78891,7 +79129,7 @@
 					"name": "ped"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p1"
 				}
 			],
@@ -78908,7 +79146,7 @@
 					"name": "ped"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p1"
 				}
 			],
@@ -80057,7 +80295,7 @@
 					"name": "p0"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p1"
 				}
 			],
@@ -80669,7 +80907,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "ropeId"
 				}
 			],
@@ -80695,7 +80933,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "ropeId"
 				}
 			],
@@ -80708,7 +80946,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "ropeId"
 				},
 				{
@@ -80725,7 +80963,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "ropeId"
 				},
 				{
@@ -80980,7 +81218,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "ropeId"
 				}
 			],
@@ -81534,7 +81772,7 @@
 		"0x15F944730C832252": {
 			"name": "SET_USE_KINEMATIC_PHYSICS",
 			"jhash": "",
-			"comment": "PED_RAGDOLL_BUMP Proof?",
+			"comment": "",
 			"params": [
 				{
 					"type": "Entity",
@@ -81660,15 +81898,15 @@
 					"name": "player"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "r"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "g"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "b"
 				}
 			],
@@ -82426,7 +82664,7 @@
 		"0x0032A6DBA562C518": {
 			"name": "RESET_LAW_RESPONSE_DELAY_OVERRIDE",
 			"jhash": "0x47CAB814",
-			"comment": "2 matches in 1 script - am_hold_up\n\nUsed in multiplayer scripts?",
+			"comment": "",
 			"params": [],
 			"return_type": "void",
 			"build": "323"
@@ -83312,6 +83550,14 @@
 			],
 			"return_type": "void",
 			"build": "323"
+		},
+		"0x875BDD898B99C8CE": {
+			"name": "GET_PLAYER_TARGETING_MODE",
+			"jhash": "",
+			"comment": "",
+			"params": [],
+			"return_type": "int",
+			"build": "3570"
 		},
 		"0x5702B917B99DB1CD": {
 			"name": "SET_PLAYER_TARGET_LEVEL",
@@ -84482,7 +84728,7 @@
 					"name": "player"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "tintIndex"
 				}
 			],
@@ -84516,7 +84762,7 @@
 					"name": "player"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "index"
 				}
 			],
@@ -84550,7 +84796,7 @@
 					"name": "player"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "tintIndex"
 				}
 			],
@@ -84635,15 +84881,15 @@
 					"name": "player"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "r"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "g"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "b"
 				}
 			],
@@ -84653,7 +84899,7 @@
 		"0x11D5F725F0E780E0": {
 			"name": "SET_PLAYER_PHONE_PALETTE_IDX",
 			"jhash": "",
-			"comment": "example:\n\nflags: 0-6\n\nPLAYER::SET_PLAYER_RESET_FLAG_PREFER_REAR_SEATS(PLAYER::PLAYER_ID(), 6);\n\nwouldnt the flag be the seatIndex?",
+			"comment": "",
 			"params": [
 				{
 					"type": "Player",
@@ -84661,7 +84907,7 @@
 				},
 				{
 					"type": "int",
-					"name": "flags"
+					"name": "idx"
 				}
 			],
 			"return_type": "void",
@@ -86926,7 +87172,7 @@
 					"name": "context"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "out"
 				}
 			],
@@ -87323,7 +87569,7 @@
 					"name": "name"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "value"
 				}
 			],
@@ -87407,7 +87653,7 @@
 					"name": "string"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "token"
 				}
 			],
@@ -87427,7 +87673,7 @@
 					"name": "string"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "token"
 				}
 			],
@@ -87522,7 +87768,7 @@
 					"name": "p0"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p1"
 				}
 			],
@@ -87637,7 +87883,7 @@
 					"name": "plateData"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "token"
 				}
 			],
@@ -87680,7 +87926,7 @@
 					"name": "plateText"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "token"
 				}
 			],
@@ -87740,7 +87986,7 @@
 					"name": "p0"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p1"
 				}
 			],
@@ -87835,7 +88081,7 @@
 					"name": "p0"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p1"
 				},
 				{
@@ -87937,7 +88183,7 @@
 					"name": "p1"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p2"
 				}
 			],
@@ -88060,7 +88306,7 @@
 					"name": "p0"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p1"
 				}
 			],
@@ -88126,7 +88372,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				}
 			],
@@ -88624,7 +88870,7 @@
 					"name": "statHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outValue"
 				},
 				{
@@ -88758,7 +89004,7 @@
 					"name": "statHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outValue"
 				},
 				{
@@ -89567,11 +89813,11 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "playerAccountId"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "posixTime"
 				}
 			],
@@ -91375,7 +91621,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "p0"
 				}
 			],
@@ -93700,6 +93946,39 @@
 				"_PLAYSTATS_NJVS_VOTE"
 			]
 		},
+		"0x01D8B04D02F1217F": {
+			"name": "_PLAYSTATS_DEATH_INFO",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Ped",
+					"name": "victimPed"
+				},
+				{
+					"type": "Ped",
+					"name": "killerPed"
+				},
+				{
+					"type": "int",
+					"name": "mentalState"
+				},
+				{
+					"type": "BOOL",
+					"name": "revengeKill"
+				},
+				{
+					"type": "int",
+					"name": "victimKvK"
+				},
+				{
+					"type": "int",
+					"name": "killerKvK"
+				}
+			],
+			"return_type": "void",
+			"build": "3570"
+		},
 		"0x46A70777BE6CEAB9": {
 			"name": "PLAYSTATS_FM_MISSION_END",
 			"jhash": "",
@@ -94304,6 +94583,19 @@
 			],
 			"return_type": "void",
 			"build": "3258"
+		},
+		"0x574A7808450E141C": {
+			"name": "_PLAYSTATS_SCRIPT_EVENT_FPOM",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any*",
+					"name": "data"
+				}
+			],
+			"return_type": "void",
+			"build": "3570"
 		}
 	},
 	"STREAMING": {
@@ -96173,10 +96465,6 @@
 				{
 					"type": "const char*",
 					"name": "overrideEntryClipsetName"
-				},
-				{
-					"type": "Any",
-					"name": "p7"
 				}
 			],
 			"return_type": "void",
@@ -97638,15 +97926,15 @@
 					"name": "ped"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "priorityLowData"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "priorityMidData"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "priorityHighData"
 				},
 				{
@@ -97671,15 +97959,15 @@
 					"name": "entity"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "priorityLowData"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "priorityMidData"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "priorityHighData"
 				},
 				{
@@ -98028,7 +98316,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "taskSequenceId"
 				}
 			],
@@ -98088,7 +98376,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "taskSequenceId"
 				}
 			],
@@ -98111,6 +98399,19 @@
 			],
 			"return_type": "void",
 			"build": "323"
+		},
+		"0xF5D1F489147CB683": {
+			"name": "SET_SEQUENCE_PREVENT_MIGRATION",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "taskSequenceId"
+				}
+			],
+			"return_type": "void",
+			"build": "3570"
 		},
 		"0x00A9010CFE1E3533": {
 			"name": "GET_SEQUENCE_PROGRESS",
@@ -101682,11 +101983,11 @@
 					"name": "ped"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "timeLeftAtNode"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "nodeId"
 				}
 			],
@@ -102296,7 +102597,7 @@
 					"name": "name"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "points"
 				}
 			],
@@ -102363,7 +102664,7 @@
 					"name": "z"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "point"
 				}
 			],
@@ -102424,6 +102725,23 @@
 			],
 			"return_type": "int",
 			"build": "323"
+		},
+		"0x686ECCD99D4E61BB": {
+			"name": "SET_PED_WAYPOINT_PROGRESS",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Ped",
+					"name": "ped"
+				},
+				{
+					"type": "int",
+					"name": "progress"
+				}
+			],
+			"return_type": "void",
+			"build": "3570"
 		},
 		"0xE6A877C64CAF1BC5": {
 			"name": "GET_PED_WAYPOINT_DISTANCE",
@@ -102889,6 +103207,19 @@
 			"return_type": "void",
 			"build": "323"
 		},
+		"0xE435D3539EFDCD1B": {
+			"name": "VEHICLE_WAYPOINT_PLAYBACK_GET_IS_PAUSED",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Vehicle",
+					"name": "vehicle"
+				}
+			],
+			"return_type": "BOOL",
+			"build": "3570"
+		},
 		"0xDC04FCAA7839D492": {
 			"name": "VEHICLE_WAYPOINT_PLAYBACK_RESUME",
 			"jhash": "0xBEB14C82",
@@ -103084,7 +103415,7 @@
 					"name": "network"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "initialParameters"
 				},
 				{
@@ -103125,7 +103456,7 @@
 					"name": "network"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "initialParameters"
 				},
 				{
@@ -103451,6 +103782,23 @@
 			"return_type": "void",
 			"build": "3095"
 		},
+		"0x0EFE4834A2F40563": {
+			"name": "_SET_AMBIENT_PED_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Ped",
+					"name": "ped"
+				},
+				{
+					"type": "BOOL",
+					"name": "enable"
+				}
+			],
+			"return_type": "void",
+			"build": "3570"
+		},
 		"0x349CE7B56DAFD95C": {
 			"name": "IS_MOVE_BLEND_RATIO_STILL",
 			"jhash": "0xE9DAF877",
@@ -103558,7 +103906,7 @@
 		"0xE45B7F222DE47E09": {
 			"name": "IS_PED_STRAFING",
 			"jhash": "0xEFEED13C",
-			"comment": "What's strafing?",
+			"comment": "",
 			"params": [
 				{
 					"type": "Ped",
@@ -105011,15 +105359,15 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "r"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "g"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "b"
 				}
 			],
@@ -105087,15 +105435,15 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "r"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "g"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "b"
 				}
 			],
@@ -105595,11 +105943,11 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "colorPrimary"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "colorSecondary"
 				}
 			],
@@ -108003,7 +108351,7 @@
 		"0xA178472EBB8AE60D": {
 			"name": "SET_HELI_BLADES_FULL_SPEED",
 			"jhash": "0x033A9408",
-			"comment": "Equivalent of SET_HELI_BLADES_SPEED(vehicleHandle, 1.0f);\n\nthis native works on planes to?",
+			"comment": "Equivalent of SET_HELI_BLADES_SPEED(vehicleHandle, 1.0f);",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -108222,7 +108570,7 @@
 		"0x2497C4717C8B881E": {
 			"name": "SET_VEHICLE_ENGINE_ON",
 			"jhash": "0x7FBC86F1",
-			"comment": "Starts or stops the engine on the specified vehicle.\n\nvehicle: The vehicle to start or stop the engine on.\nvalue: true to turn the vehicle on; false to turn it off.\ninstantly: if true, the vehicle will be set to the state immediately; otherwise, the current driver will physically turn on or off the engine.\ndisableAutoStart: If true, the system will prevent the engine from starting when the player got into it.\n\nfrom what I've tested when I do this to a helicopter the propellers turn off after the engine has started. so is there any way to keep the heli propellers on?",
+			"comment": "Starts or stops the engine on the specified vehicle.\n\nvehicle: The vehicle to start or stop the engine on.\nvalue: true to turn the vehicle on; false to turn it off.\ninstantly: if true, the vehicle will be set to the state immediately; otherwise, the current driver will physically turn on or off the engine.\ndisableAutoStart: If true, the system will prevent the engine from starting when the player got into it.",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -108679,7 +109027,7 @@
 					"name": "modelHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "successIndicator"
 				}
 			],
@@ -108935,11 +109283,11 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "pearlescentColor"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "wheelColor"
 				}
 			],
@@ -108977,7 +109325,7 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "color"
 				}
 			],
@@ -109019,7 +109367,7 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "color"
 				}
 			],
@@ -111797,15 +112145,15 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "paintType"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "color"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "pearlescentColor"
 				}
 			],
@@ -111822,11 +112170,11 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "paintType"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "color"
 				}
 			],
@@ -112216,15 +112564,15 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "r"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "g"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "b"
 				}
 			],
@@ -112279,15 +112627,15 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "r"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "g"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "b"
 				}
 			],
@@ -114543,7 +114891,7 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outIndex"
 				}
 			],
@@ -114762,15 +115110,15 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "r"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "g"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "b"
 				}
 			],
@@ -117719,7 +118067,7 @@
 					"name": "index"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "boneIndex"
 				},
 				{
@@ -118792,7 +119140,7 @@
 					"name": "seat"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "ammo"
 				}
 			],
@@ -118813,7 +119161,7 @@
 					"name": "weaponHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "ammo"
 				}
 			],
@@ -118876,7 +119224,7 @@
 					"name": "weaponHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "ammo"
 				}
 			],
@@ -118897,7 +119245,7 @@
 					"name": "ammoTypeHash"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "ammo"
 				}
 			],
@@ -120264,7 +120612,7 @@
 					"name": "radius"
 				},
 				{
-					"type": "ref int",
+					"type": "int*",
 					"name": "outZoneId"
 				}
 			],
