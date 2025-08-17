@@ -55,7 +55,7 @@ public partial class WrapperFileGenerator
             _writer.Write("\">An instance of <c>");
             _writer.Write(param.Type.ToString());
             _writer.Write("</c> as represented in CLR type <c>");
-            _writer.Write(context.ReturnTypeString);
+            _writer.Write(GetStringForType(param.Type, true));
             _writer.WriteLine("</c>.</param>");
         }
 
