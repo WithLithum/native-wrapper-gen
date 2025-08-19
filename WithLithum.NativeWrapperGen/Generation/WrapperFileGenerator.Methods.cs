@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace WithLithum.NativeWrapperGen.Generation;
 
+using System.Security;
 using System.Text;
 using WithLithum.NativeWrapperGen.Models;
 
@@ -84,11 +85,15 @@ public partial class WrapperFileGenerator
         _writer.WriteLine("/// </remarks>");
 
         // Returns
-        _writer.Write("/// <returns>An instance of <c>");
-        _writer.Write(commandInfo.ReturnType.ToString());
-        _writer.Write("</c> as represented in CLR type <c>");
-        _writer.Write(context.ReturnTypeString);
-        _writer.WriteLine("</c>.</returns>");
+        // Only write when it indeed has a return value.
+        if (commandInfo.ReturnType != ScriptCommandReturnType.Void)
+        {
+            _writer.Write("/// <returns>An instance of <c>");
+            _writer.Write(commandInfo.ReturnType.ToString());
+            _writer.Write("</c> as represented in CLR type <c>");
+            _writer.Write(context.ReturnTypeString);
+            _writer.WriteLine("</c>.</returns>");
+        }
     }
 
     private void WriteHashDefinition(WrapperEmitContext context)
@@ -208,12 +213,13 @@ public partial class WrapperFileGenerator
         _writer.WriteLine('}'); // end unsafe
 
         // Assign shims values back to their ref fields
-        foreach (var param in context.CommandInfo.Parameters
-            .Where(x => ParamUtil.IsPointerType(x.Type)))
+        foreach (var paramName in context.CommandInfo.Parameters
+            .Where(static x => ParamUtil.IsPointerType(x.Type))
+            .Select(x => x.Name))
         {
-            _writer.Write(ParamUtil.EscapeName(param.Name));
+            _writer.Write(ParamUtil.EscapeName(paramName));
             _writer.Write(" = ");
-            _writer.Write(ShimVariableTemplate, param.Name);
+            _writer.Write(ShimVariableTemplate, paramName);
             _writer.WriteLine(';');
         }
 
