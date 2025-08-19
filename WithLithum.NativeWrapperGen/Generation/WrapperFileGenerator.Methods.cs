@@ -33,6 +33,17 @@ public partial class WrapperFileGenerator
         return sb.ToString();
     }
 
+    private void WriteRemarkEntry(string property, string value)
+    {
+        // Property name
+        _writer.Write("/// <b>");
+        _writer.Write(SecurityElement.Escape(property));
+        _writer.Write("</b>: ");
+
+        _writer.Write(SecurityElement.Escape(value));
+        _writer.WriteLine("<br />");
+    }
+
     private void WriteDocumentation(WrapperEmitContext context)
     {
         var commandInfo = context.CommandInfo;
@@ -63,13 +74,12 @@ public partial class WrapperFileGenerator
         // Remarks
         _writer.WriteLine("/// <remarks>");
 
-        _writer.Write("/// <b>Introduced in</b>: ");
-        _writer.Write(commandInfo.Build);
-        _writer.WriteLine("<br />");
-
-        _writer.Write("/// <b>PC Hash</b>: ");
-        _writer.Write(context.Hash);
-        _writer.WriteLine("<br />");
+        WriteRemarkEntry("Introduced in", commandInfo.Build);
+        WriteRemarkEntry("PC hash", context.Hash);
+        if (!string.IsNullOrWhiteSpace(commandInfo.JenkinsHash))
+        {
+            WriteRemarkEntry("Original hash", commandInfo.JenkinsHash);
+        }
 
         _writer.WriteLine("/// </remarks>");
 
