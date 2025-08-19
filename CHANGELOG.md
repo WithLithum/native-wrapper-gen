@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added original Jenkins hash information to all natives that have a Jenkins
+  hash.
+
+### Changed
+
+- Return value documentation is no longer added for the natives that return
+  `Void`.
+- Upgraded `System.CommandLine` to 2.0 Beta 7.
+
 ## [0.1.2] - 2025-08-19
 
 ### Added
@@ -28,7 +39,7 @@ return type of the method in question.
 
 _Initial release._
 
-[Unreleased]: https://github.com/WithLithum/NativeWrapperGen/compare/v0.1.1...HEAD
-[0.1.2]: https://github.com/WithLithum/NativeWrapperGen/compare/v0.1.1...v0.1.2
-[0.1.1]: https://github.com/WithLithum/NativeWrapperGen/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/WithLithum/NativeWrapperGen/releases/tag/v0.1.0
+[Unreleased]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.1.1...v0.1.2
+[0.1.1]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/WithLithum/native-wrapper-gen/releases/tag/v0.1.0
