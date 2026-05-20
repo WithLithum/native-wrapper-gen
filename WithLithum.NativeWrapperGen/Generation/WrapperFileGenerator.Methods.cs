@@ -1,21 +1,11 @@
-// Copyright (C) 2025 WithLithum.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-namespace WithLithum.NativeWrapperGen.Generation;
+// SDPX-FileCopyrightText: 2025-2026 WithLithum
+// SPDX-License-Identifier: Apache-2.0
 
 using System.Security;
 using System.Text;
 using WithLithum.NativeWrapperGen.Models;
+
+namespace WithLithum.NativeWrapperGen.Generation;
 
 public partial class WrapperFileGenerator
 {
@@ -152,16 +142,7 @@ public partial class WrapperFileGenerator
         _writer.WriteLine("{");
 
         // Generate ref shim variables
-        foreach (var param in context.CommandInfo.Parameters
-            .Where(x => ParamUtil.IsPointerType(x.Type)))
-        {
-            _writer.Write(GetStringForType(param.Type, stripRef: true));
-            _writer.Write(' ');
-            _writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
-            _writer.Write(" = ");
-            _writer.WriteEscapedName(param.Name);
-            _writer.WriteLine(';');
-        }
+        WriteParameterShims(context.CommandInfo.Parameters);
 
         // Create return type variable if necessary
         if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
@@ -192,23 +173,7 @@ public partial class WrapperFileGenerator
         _writer.Write('('); // begin arguments
         _writer.WriteSurround(CommonFieldHeader, context.SymbolNameHash, HashValueFieldFooter);
 
-        // Use 'for' loop for speed.
-        // ReSharper disable once ForCanBeConvertedToForeach
-        for (var i = 0; i < context.CommandInfo.Parameters.Count; i++)
-        {
-            var param = context.CommandInfo.Parameters[i];
-            _writer.Write(',');
-            _writer.Write(' ');
-            if (ParamUtil.IsPointerType(param.Type))
-            {
-                _writer.Write('&');
-                _writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
-            }
-            else
-            {
-                _writer.WriteEscapedName(param.Name);
-            }
-        }
+        WriteNativeCallPointerArguments(context);
 
         _writer.WriteLine(");"); // end arguments
         _writer.WriteLine('}'); // end unsafe
@@ -267,6 +232,49 @@ public partial class WrapperFileGenerator
         }
 
         _writer.Write(')');
+    }
+
+    private void WriteParameterShims(IReadOnlyList<ScriptCommandParameterInfo> paramList)
+    {
+        // Use 'for' loop for speed.
+        // ReSharper disable once ForCanBeConvertedToForeach
+        for (int i = 0; i < paramList.Count; i++)
+        {
+            var param = paramList[i];
+            if (!ParamUtil.IsPointerType(param.Type))
+            {
+                continue;
+            }
+
+            _writer.Write(GetStringForType(param.Type, stripRef: true));
+            _writer.Write(' ');
+            _writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
+            _writer.Write(" = ");
+            _writer.WriteEscapedName(param.Name);
+            _writer.WriteLine(';');
+        }
+    }
+
+    // Use 'for' loop for speed.
+    // ReSharper disable once ForCanBeConvertedToForeach
+    private void WriteNativeCallPointerArguments(WrapperEmitContext context)
+    {
+        var paramList = context.CommandInfo.Parameters;
+        for (var i = 0; i < paramList.Count; i++)
+        {
+            var param = paramList[i];
+            _writer.Write(',');
+            _writer.Write(' ');
+            if (ParamUtil.IsPointerType(param.Type))
+            {
+                _writer.Write('&');
+                _writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
+            }
+            else
+            {
+                _writer.WriteEscapedName(param.Name);
+            }
+        }
     }
 
     private void WriteWrapperMethod(WrapperEmitContext context)
