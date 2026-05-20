@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2025 WithLithum.
+// Copyright (C) 2025 WithLithum.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 namespace WithLithum.NativeWrapperGen.Generation;
 
 using System.Collections.ObjectModel;
-
+using System.Runtime.CompilerServices;
 using SCPT = Models.ScriptCommandParameterType;
 
 internal static class ParamUtil
@@ -51,6 +51,32 @@ internal static class ParamUtil
         "out",
         "base"
     ];
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void WriteReturn(this TextWriter writer,
+        string context)
+    {
+        writer.Write("return ");
+        writer.Write(context);
+        writer.Write(';');
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void WriteSurround(this TextWriter writer,
+        string head,
+        string content,
+        string foot)
+    {
+        writer.Write(head);
+        writer.Write(content);
+        writer.Write(foot);
+    }
+
+    internal static void WriteEscapedName(this TextWriter writer, string name)
+    {
+        writer.Write('@');
+        writer.Write(name);
+    }
 
     internal static string EscapeName(string name)
     {

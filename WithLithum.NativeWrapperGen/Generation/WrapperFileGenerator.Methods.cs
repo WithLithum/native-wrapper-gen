@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2025 WithLithum.
+// Copyright (C) 2025 WithLithum.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,8 +19,10 @@ using WithLithum.NativeWrapperGen.Models;
 
 public partial class WrapperFileGenerator
 {
-    private const string HashValueFieldTemplate = "NWG_{0}_Value";
-    private const string ShimVariableTemplate = "NWG_{0}_shim";
+    private const string CommonFieldHeader = "NWG_";
+    private const string HashValueFieldFooter = "_Value";
+    private const string ShimVariableFooter = "_shim";
+
     private const string ReturnValueVariable = "NWG_return_value";
 
     private static string EscapeForDocumentation(string comment)
@@ -99,7 +101,7 @@ public partial class WrapperFileGenerator
     private void WriteHashDefinition(WrapperEmitContext context)
     {
         _writer.Write("private static readonly global::GTA.Native.Hash ");
-        _writer.Write(HashValueFieldTemplate, context.SymbolNameHash);
+        _writer.WriteSurround(CommonFieldHeader, context.SymbolNameHash, HashValueFieldFooter);
         _writer.Write(" = (global::GTA.Native.Hash)");
         _writer.Write(context.Hash);
         _writer.WriteLine(';');
@@ -127,13 +129,13 @@ public partial class WrapperFileGenerator
 
         _writer.Write('(');
 
-        _writer.Write(HashValueFieldTemplate, context.SymbolNameHash);
+        _writer.WriteSurround(CommonFieldHeader, context.SymbolNameHash, HashValueFieldFooter);
 
         foreach (var param in commandInfo.Parameters)
         {
             _writer.Write(',');
             _writer.Write(' ');
-            _writer.Write(ParamUtil.EscapeName(param.Name));
+            _writer.WriteEscapedName(param.Name);
         }
 
         _writer.WriteLine(");");
@@ -153,21 +155,20 @@ public partial class WrapperFileGenerator
         foreach (var param in context.CommandInfo.Parameters
             .Where(x => ParamUtil.IsPointerType(x.Type)))
         {
-            var shimName = string.Format(ShimVariableTemplate, param.Name);
             _writer.Write(GetStringForType(param.Type, stripRef: true));
             _writer.Write(' ');
-            _writer.Write(shimName);
+            _writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
             _writer.Write(" = ");
-            _writer.Write(ParamUtil.EscapeName(param.Name));
+            _writer.WriteEscapedName(param.Name);
             _writer.WriteLine(';');
         }
 
         // Create return type variable if necessary
         if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
         {
-            _writer.WriteLine("{0} {1};",
-                context.ReturnTypeString,
-                ReturnValueVariable);
+            _writer.Write(context.ReturnTypeString);
+            _writer.Write(' ');
+            _writer.Write(ReturnValueVariable);
         }
 
         // Generate call body
@@ -189,7 +190,7 @@ public partial class WrapperFileGenerator
         }
 
         _writer.Write('('); // begin arguments
-        _writer.Write(HashValueFieldTemplate, context.SymbolNameHash);
+        _writer.WriteSurround(CommonFieldHeader, context.SymbolNameHash, HashValueFieldFooter);
 
         // Use 'for' loop for speed.
         // ReSharper disable once ForCanBeConvertedToForeach
@@ -201,11 +202,11 @@ public partial class WrapperFileGenerator
             if (ParamUtil.IsPointerType(param.Type))
             {
                 _writer.Write('&');
-                _writer.Write(ShimVariableTemplate, param.Name);
+                _writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
             }
             else
             {
-                _writer.Write(ParamUtil.EscapeName(param.Name));
+                _writer.WriteEscapedName(param.Name);
             }
         }
 
@@ -217,16 +218,16 @@ public partial class WrapperFileGenerator
             .Where(static x => ParamUtil.IsPointerType(x.Type))
             .Select(x => x.Name))
         {
-            _writer.Write(ParamUtil.EscapeName(paramName));
+            _writer.WriteEscapedName(paramName);
             _writer.Write(" = ");
-            _writer.Write(ShimVariableTemplate, paramName);
+            _writer.WriteSurround(CommonFieldHeader, paramName, ShimVariableFooter);
             _writer.WriteLine(';');
         }
 
         // Return retVal
         if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
         {
-            _writer.Write("return {0};", ReturnValueVariable);
+            _writer.WriteReturn(ReturnValueVariable);
         }
 
         _writer.WriteLine('}'); // end block
@@ -262,7 +263,7 @@ public partial class WrapperFileGenerator
 
             _writer.Write(GetStringForType(parameter.Type));
             _writer.Write(' ');
-            _writer.Write(ParamUtil.EscapeName(parameter.Name));
+            _writer.WriteEscapedName(parameter.Name);
         }
 
         _writer.Write(')');
@@ -276,14 +277,15 @@ public partial class WrapperFileGenerator
 
         _writer.WriteLine();
         _writer.WriteLine("// ---------------------------------------------------");
-        _writer.WriteLine("// {0}", commandInfo.Name ?? context.Hash);
+        _writer.Write("// ");
+        _writer.WriteLine(commandInfo.Name ?? context.Hash);
         _writer.WriteLine("// ---------------------------------------------------");
         _writer.WriteLine();
 
         WriteHashDefinition(context);
         WriteDocumentation(context);
         WriteMethodSignature(context);
-        
+
         if (paramsHasPointer)
         {
             WriteWrapperBodyWithPointer(context);
