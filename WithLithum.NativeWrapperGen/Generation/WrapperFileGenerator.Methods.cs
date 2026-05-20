@@ -150,6 +150,7 @@ public partial class WrapperFileGenerator
             _writer.Write(context.ReturnTypeString);
             _writer.Write(' ');
             _writer.Write(ReturnValueVariable);
+            _writer.WriteLine(';');
         }
 
         // Generate call body
