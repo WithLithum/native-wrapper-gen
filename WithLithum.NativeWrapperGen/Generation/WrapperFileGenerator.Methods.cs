@@ -37,7 +37,7 @@ public partial class WrapperFileGenerator
         _writer.WriteLine("<br />");
     }
 
-    private void WriteDocumentation(WrapperEmitContext context)
+    private void WriteDocumentation(in WrapperEmitContext context)
     {
         var commandInfo = context.CommandInfo;
 
@@ -88,7 +88,7 @@ public partial class WrapperFileGenerator
         }
     }
 
-    private void WriteHashDefinition(WrapperEmitContext context)
+    private void WriteHashDefinition(in WrapperEmitContext context)
     {
         _writer.Write("private static readonly global::GTA.Native.Hash ");
         _writer.WriteSurround(CommonFieldHeader, context.SymbolNameHash, HashValueFieldFooter);
@@ -97,7 +97,7 @@ public partial class WrapperFileGenerator
         _writer.WriteLine(';');
     }
 
-    private void WriteWrapperBodyNoPointer(WrapperEmitContext context)
+    private void WriteWrapperBodyNoPointer(in WrapperEmitContext context)
     {
         var commandInfo = context.CommandInfo;
 
@@ -132,7 +132,7 @@ public partial class WrapperFileGenerator
         _writer.WriteLine('}');
     }
 
-    private void WriteWrapperBodyWithPointer(WrapperEmitContext context)
+    private void WriteWrapperBodyWithPointer(in WrapperEmitContext context)
     {
         if (_writer == null)
         {
@@ -198,7 +198,7 @@ public partial class WrapperFileGenerator
         _writer.WriteLine('}'); // end block
     }
 
-    private void WriteMethodSignature(WrapperEmitContext context)
+    private void WriteMethodSignature(in WrapperEmitContext context)
     {
         var commandInfo = context.CommandInfo;
 
@@ -257,7 +257,7 @@ public partial class WrapperFileGenerator
 
     // Use 'for' loop for speed.
     // ReSharper disable once ForCanBeConvertedToForeach
-    private void WriteNativeCallPointerArguments(WrapperEmitContext context)
+    private void WriteNativeCallPointerArguments(in WrapperEmitContext context)
     {
         var paramList = context.CommandInfo.Parameters;
         for (var i = 0; i < paramList.Count; i++)
@@ -277,7 +277,7 @@ public partial class WrapperFileGenerator
         }
     }
 
-    private void WriteWrapperMethod(WrapperEmitContext context)
+    private void WriteWrapperMethod(in WrapperEmitContext context)
     {
         var commandInfo = context.CommandInfo;
 
