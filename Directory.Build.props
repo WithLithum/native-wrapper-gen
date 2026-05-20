@@ -1,11 +1,12 @@
 <Project>
-  <PropertyGroup>
-    <VersionPrefix>0.1.2</VersionPrefix>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <Authors>WithLithum</Authors>
-    <Company>WithLithum</Company>
-    <ProductName>$(SolutionName)</ProductName>
-    <RepositoryUrl>https://github.com/WithLithum/native-wrapper-gen.git</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/WithLithum/native-wrapper-gen</PackageProjectUrl>
-  </PropertyGroup>
+	<PropertyGroup>
+		<VersionPrefix>0.1.2</VersionPrefix>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<Authors>WithLithum</Authors>
+		<Company>WithLithum</Company>
+		<ProductName>$(SolutionName)</ProductName>
+		<Copyright>Copyright (C) 2025-2026 WithLithum.</Copyright>
+		<RepositoryUrl>https://github.com/WithLithum/native-wrapper-gen.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/WithLithum/native-wrapper-gen</PackageProjectUrl>
+	</PropertyGroup>
 </Project>

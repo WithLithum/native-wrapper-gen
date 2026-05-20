@@ -1,3 +1,6 @@
+[*]
+file_header_template = SDPX-FileCopyrightText: 2025-2026 WithLithum\nSPDX-License-Identifier: Apache-2.0
+
 [*.cs]
-resharper_qualified_using_at_nested_scope = true
-resharper_add_imports_to_deepest_scope = true
+csharp_style_namespace_declarations = file_scoped : warning;
+csharp_using_directive_placement    = outside_namespace : suggestion;

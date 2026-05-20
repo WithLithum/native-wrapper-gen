@@ -1,29 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <PublishAot>true</PublishAot>
-    <InvariantGlobalization>true</InvariantGlobalization>
-    <Title>Native Wrapper Generator for GTA V</Title>
-    <Description>A generator for generating wrappers around GTA V natives, based on alloc8or's gta5-nativedb-data</Description>
-    <Copyright>(C) WithLithum 2025.</Copyright>
-    <PackageTags>gta5;gtav;scripthookvdotnet;shvdn;shvdn3;scripthookvdotnet3;gta5-script;gtav-script;gta5-modding;gtav-modding;gta5-natives;</PackageTags>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PublishAot>true</PublishAot>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<Title>Native Wrapper Generator for GTA V</Title>
+		<Description>A generator for generating wrappers around GTA V natives, based on alloc8or's gta5-nativedb-data</Description>
+		<Copyright>(C) WithLithum 2026.</Copyright>
+		<PackageTags>gta5;gtav;scripthookvdotnet;shvdn;shvdn3;scripthookvdotnet3;gta5-script;gtav-script;gta5-modding;gtav-modding;gta5-natives;</PackageTags>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta7.25380.108" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="System.CommandLine" Version="2.0.8" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="Data\BundledNativeInfo.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\SHVDNSettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="Data\BundledNativeInfo.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\SHVDNSettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>
