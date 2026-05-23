@@ -1,8 +1,6 @@
 // SDPX-FileCopyrightText: 2025-2026 WithLithum
 // SPDX-License-Identifier: Apache-2.0
 
-using System.Security;
-using System.Text;
 using WithLithum.NativeWrapperGen.Models;
 
 namespace WithLithum.NativeWrapperGen.Generation;
@@ -14,80 +12,7 @@ public partial class WrapperFileGenerator
     private const string ShimVariableFooter = "_shim";
 
     private const string ReturnValueVariable = "NWG_return_value";
-
-    private static string EscapeForDocumentation(string comment)
-    {
-        var sb = new StringBuilder(comment)
-            .Replace("&", "&amp;")
-            .Replace("<", "&lt;")
-            .Replace(">", "&gt;")
-            .Replace("\n", "<br />");
-
-        return sb.ToString();
-    }
-
-    private void WriteRemarkEntry(string property, string value)
-    {
-        // Property name
-        _writer.Write("/// <b>");
-        _writer.Write(SecurityElement.Escape(property));
-        _writer.Write("</b>: ");
-
-        _writer.Write(SecurityElement.Escape(value));
-        _writer.WriteLine("<br />");
-    }
-
-    private void WriteDocumentation(in WrapperEmitContext context)
-    {
-        var commandInfo = context.CommandInfo;
-
-        // Summary
-        if (!string.IsNullOrWhiteSpace(commandInfo.Comment))
-        {
-            _writer.WriteLine("/// <summary>");
-
-            _writer.Write("/// ");
-            _writer.WriteLine(EscapeForDocumentation(commandInfo.Comment));
-
-            _writer.WriteLine("/// </summary>");
-        }
-
-        // Parameters
-        foreach (var param in commandInfo.Parameters)
-        {
-            _writer.Write("/// <param name=\"");
-            _writer.Write(param.Name);
-            _writer.Write("\">An instance of <c>");
-            _writer.Write(param.Type.ToString());
-            _writer.Write("</c> as represented in CLR type <c>");
-            _writer.Write(GetStringForType(param.Type, true));
-            _writer.WriteLine("</c>.</param>");
-        }
-
-        // Remarks
-        _writer.WriteLine("/// <remarks>");
-
-        WriteRemarkEntry("Introduced in", commandInfo.Build);
-        WriteRemarkEntry("PC hash", context.Hash);
-        if (!string.IsNullOrWhiteSpace(commandInfo.JenkinsHash))
-        {
-            WriteRemarkEntry("Original hash", commandInfo.JenkinsHash);
-        }
-
-        _writer.WriteLine("/// </remarks>");
-
-        // Returns
-        // Only write when it indeed has a return value.
-        if (commandInfo.ReturnType != ScriptCommandReturnType.Void)
-        {
-            _writer.Write("/// <returns>An instance of <c>");
-            _writer.Write(commandInfo.ReturnType.ToString());
-            _writer.Write("</c> as represented in CLR type <c>");
-            _writer.Write(context.ReturnTypeString);
-            _writer.WriteLine("</c>.</returns>");
-        }
-    }
-
+    
     private void WriteHashDefinition(in WrapperEmitContext context)
     {
         _writer.Write("private static readonly global::GTA.Native.Hash ");
@@ -292,7 +217,7 @@ public partial class WrapperFileGenerator
         _writer.WriteLine();
 
         WriteHashDefinition(context);
-        WriteDocumentation(context);
+        DocGenerator.WriteDocumentation(context, _writer, _settings);
         WriteMethodSignature(context);
 
         if (paramsHasPointer)
