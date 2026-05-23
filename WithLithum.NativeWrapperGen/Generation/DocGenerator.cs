@@ -15,7 +15,8 @@ public static class DocGenerator
         '>',
         '&',
         '"',
-        '\''
+        '\'',
+        '\n'
     ];
     
     private static string GetStringForType(ScriptCommandParameterType paramType,
@@ -54,20 +55,9 @@ public static class DocGenerator
                     '&' => "&amp;",
                     '\"' => "&quot;",
                     '\'' => "&apos;",
+                    '\n' => "<br />",
                     _ => c.ToString() // Normally won't reach this
                 });
-                continue;
-            }
-
-            if (c == '\\')
-            {
-                var nextI = i + 1;
-                if (nextI < buf.Length && buf[nextI] == 'n')
-                {
-                    writer.Write("<br />");
-                    i = nextI;
-                }
-
                 continue;
             }
 
@@ -101,7 +91,8 @@ public static class DocGenerator
 
             writer.Write("/// ");
             WriteEscapedForDocumentation(commandInfo.Comment, writer);
-
+            writer.WriteLine();
+            
             writer.WriteLine("/// </summary>");
         }
 

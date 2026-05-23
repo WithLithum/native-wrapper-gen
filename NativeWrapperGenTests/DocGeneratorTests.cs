@@ -11,7 +11,7 @@ public class DocGeneratorTests
     public void WriteEscaped_Comment_EscapeCorrectly()
     {
         // Arrange
-        const string input = "This is a comment with a <tag> and a \\n newline.";
+        const string input = "This is a comment with a <tag> and a \n newline.";
         var writer = new StringWriter();
 
         // Act
