@@ -13,22 +13,22 @@
 // limitations under the License.
 namespace WithLithum.NativeWrapperGen.Generation;
 
-partial class WrapperFileGenerator
+internal partial class WrapperFileGenerator
 {
-    internal void WriteNameSpaceScopeHeader(string nameSpace)
+    private void WriteNameSpaceScopeHeader(string nameSpace)
     {
         _writer.WriteLine("namespace {0}", nameSpace);
         _writer.WriteLine('{');
     }
 
-    internal void WriteClassScopeHeader(string className)
+    private void WriteClassScopeHeader(string className)
     {
         _writer.WriteLine("/// <summary>Provides wrappers for GTA V script commands.</summary>");
         _writer.WriteLine("public static partial class {0}", className);
         _writer.WriteLine('{');
     }
 
-    internal void WriteScopeFooter()
+    private void WriteScopeFooter()
     {
         _writer.WriteLine('}');
     }

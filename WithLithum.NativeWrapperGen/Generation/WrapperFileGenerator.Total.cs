@@ -19,7 +19,14 @@ partial class WrapperFileGenerator
         _shimGenerator = shimGenerator;
     }
 
-    internal WrapperEmitContext CreateContext(string hash, ScriptCommandInfo commandInfo)
+    private string GetStringForType(ScriptCommandReturnType returnType)
+    {
+        return _settings.ReturnTypes.TryGetValue(returnType, out var writeType)
+            ? writeType
+            : returnType.ToString();
+    }
+    
+    private WrapperEmitContext CreateContext(string hash, ScriptCommandInfo commandInfo)
     {
         return new WrapperEmitContext
         {
