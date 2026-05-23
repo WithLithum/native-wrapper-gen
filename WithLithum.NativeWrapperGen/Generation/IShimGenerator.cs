@@ -3,7 +3,7 @@
 
 namespace WithLithum.NativeWrapperGen.Generation;
 
-public interface ShimGenerator
+public interface IShimGenerator
 {
     void WriteMethod(in WrapperEmitContext context, TextWriter writer);
 }

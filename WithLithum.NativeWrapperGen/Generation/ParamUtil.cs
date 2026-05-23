@@ -11,6 +11,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+using WithLithum.NativeWrapperGen.Models;
+
 namespace WithLithum.NativeWrapperGen.Generation;
 
 using System.Collections.ObjectModel;
@@ -52,6 +55,20 @@ internal static class ParamUtil
         "base"
     ];
 
+    internal static bool HasPointerParameter(IReadOnlyList<ScriptCommandParameterInfo> paramList)
+    {
+        for (int i = 0; i < paramList.Count; i++)
+        {
+            var param = paramList[i];
+            if (ParamUtil.IsPointerType(param.Type))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void WriteReturn(this TextWriter writer,
         string context)
