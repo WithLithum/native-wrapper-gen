@@ -10,7 +10,7 @@ if (!(Test-Path "NWG_WORK" -PathType Container)) {
 }
 
 $nativesJsonPath = Join-Path -Path $newDir.FullName -ChildPath 'natives.json'
-$wrapperPath = Join-Path -Path $PWD -ChildPath "WithLithum.NativeWrapper" -AdditionalChildPath "Natives.{0}.cs"
+$wrapperPath = Join-Path -Path $PWD -ChildPath "wrappers\WithLithum.NativeWrapper" -AdditionalChildPath "Natives.{0}.cs"
 
 if (!($NoDownload)) {
     try {
