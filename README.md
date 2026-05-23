@@ -1,6 +1,6 @@
 # Native Wrapper Generator
 
-Generates native function wrappers for [Community Script Hook V .NET](https://github.com/scripthookvdotnet/scripthookvdotnet).
+Generates native function wrappers for [Script Hook V .NET](https://github.com/scripthookvdotnet/scripthookvdotnet) and compatible script hook wrappers.
 
 Compared to the [old generator](https://github.com/NativeFx/InteropGenerator) that was written all the way back 3 years ago, this new generator:
 
@@ -56,7 +56,7 @@ WithLithum.NativeWrapperGen
 
 ## Building
 
-You need .NET SDK that can target 8.0. Any OS can build and run the generator, but GTA V doesn't work on anywhere outside of Windows without Wine or Proton.
+You need .NET SDK that can target 10.0. Any OS can build and run the generator, but GTA V doesn't work on anywhere outside of Windows without Wine or Proton.
 
 When building, do *not* build the entire Solution, the build will fail. Build the `WithLithum.NativeWrapperGen` project instead.
 
