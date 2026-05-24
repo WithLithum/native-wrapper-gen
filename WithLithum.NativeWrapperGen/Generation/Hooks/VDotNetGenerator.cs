@@ -1,4 +1,4 @@
-﻿// SDPX-FileCopyrightText: 2025-2026 WithLithum
+// SDPX-FileCopyrightText: 2025-2026 WithLithum
 // SPDX-License-Identifier: Apache-2.0
 
 using WithLithum.NativeWrapperGen.Models;
@@ -8,7 +8,7 @@ namespace WithLithum.NativeWrapperGen.Generation.Hooks;
 /// <summary>
 /// Implements method shim generation for Script Hook V .NET.
 /// </summary>
-internal sealed partial class VDotNetGenerator(GeneratorSettings settings) : IShimGenerator
+public sealed partial class VDotNetGenerator(GeneratorSettings settings) : IShimGenerator
 {
     private const string CommonFieldHeader = "NWG_";
     private const string HashValueFieldFooter = "_Value";

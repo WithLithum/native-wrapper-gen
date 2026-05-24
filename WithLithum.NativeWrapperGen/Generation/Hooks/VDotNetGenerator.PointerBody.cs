@@ -1,8 +1,8 @@
-﻿using WithLithum.NativeWrapperGen.Models;
+using WithLithum.NativeWrapperGen.Models;
 
 namespace WithLithum.NativeWrapperGen.Generation.Hooks;
 
-internal partial class VDotNetGenerator
+public partial class VDotNetGenerator
 {
     private void WriteParameterShims(IReadOnlyList<ScriptCommandParameterInfo> paramList,
         TextWriter writer)
@@ -48,7 +48,7 @@ internal partial class VDotNetGenerator
             }
         }
     }
-    
+
     private void WriteWrapperBodyWithPointer(in WrapperEmitContext context,
         TextWriter writer)
     {
