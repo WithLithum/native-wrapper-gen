@@ -41,7 +41,7 @@ public sealed partial class RageGenerator : CSharpGenerator
                 continue;
             }
 
-            writer.Write("using global::Rage.Native.NativePointer ");
+            writer.Write("global::Rage.Native.NativePointer ");
             //writer.Write(GetStringForType(param.Type, stripRef: true));
             //writer.Write(' ');
             writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
@@ -139,6 +139,14 @@ public sealed partial class RageGenerator : CSharpGenerator
             writer.Write(GetStringForType(ParamUtil.PointerToRegularMap[param.Type]));
             writer.Write('>');
             writer.WriteLine("();");
+
+            // We need to release the native pointer because it is a disposable.
+            //
+            // Not going to write a 'finally' block because if something fails here the most likely
+            // outcome is that the game CTDs.
+            writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
+            writer.Write(".Dispose();");
+            writer.WriteLine();
         }
 
         // Return retVal
