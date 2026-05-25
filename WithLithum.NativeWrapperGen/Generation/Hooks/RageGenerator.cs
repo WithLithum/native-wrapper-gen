@@ -42,12 +42,8 @@ public sealed partial class RageGenerator : CSharpGenerator
             }
 
             writer.Write("global::Rage.Native.NativePointer ");
-            //writer.Write(GetStringForType(param.Type, stripRef: true));
-            //writer.Write(' ');
             writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
-            writer.Write(" = ");
-            writer.WriteEscapedName(param.Name);
-            writer.WriteLine(';');
+            writer.WriteLine(" = new global::Rage.Native.NativePointer();");
 
             // Set native pointer value.
             writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
