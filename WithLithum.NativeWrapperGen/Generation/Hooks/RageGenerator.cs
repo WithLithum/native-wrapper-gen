@@ -7,6 +7,8 @@ namespace WithLithum.NativeWrapperGen.Generation.Hooks;
 
 public sealed partial class RageGenerator : CSharpGenerator
 {
+    private const string NativeCallMethod = "global::Rage.Native.NativeFunction.CallByHash";
+
     public RageGenerator(GeneratorSettings settings) : base(settings)
     {
     }
@@ -103,7 +105,7 @@ public sealed partial class RageGenerator : CSharpGenerator
             writer.Write("{0} = ", ReturnValueVariable);
         }
 
-        writer.Write("global::Rage.Native.NativeFunction.Call");
+        writer.Write(NativeCallMethod);
 
         // Return type
         writer.Write('<');
@@ -168,7 +170,7 @@ public sealed partial class RageGenerator : CSharpGenerator
             ? "return "
             : "_ = ");
 
-        writer.Write("global::Rage.Native.NativeFunction.CallByHash");
+        writer.Write(NativeCallMethod);
 
         // Return type!
         writer.Write('<');
