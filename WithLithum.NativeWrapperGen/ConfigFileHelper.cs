@@ -46,7 +46,8 @@ public static class ConfigFileHelper
             ScriptCommandInfoContext.Default.ScriptCommandManifest);
     }
 
-    public static GeneratorSettings? LoadShvdnSettings(string? customFile = null)
+    public static GeneratorSettings? LoadDefaultSettingsFile(string fileName,
+        string? customFile = null)
     {
         if (!string.IsNullOrWhiteSpace(customFile))
         {
