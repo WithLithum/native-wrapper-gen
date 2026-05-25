@@ -136,7 +136,7 @@ public sealed partial class RageGenerator : CSharpGenerator
             writer.Write(" = ");
             writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
             writer.Write(".GetValue<");
-            writer.Write(GetStringForType(param.Type));
+            writer.Write(GetStringForType(ParamUtil.PointerToRegularMap[param.Type]));
             writer.Write('>');
             writer.WriteLine("();");
         }
