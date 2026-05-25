@@ -4,3 +4,4 @@ file_header_template = SDPX-FileCopyrightText: 2025-2026 WithLithum\nSPDX-Licens
 [*.cs]
 csharp_style_namespace_declarations = file_scoped : warning;
 csharp_using_directive_placement    = outside_namespace : suggestion;
+csharp_style_prefer_primary_constructors = false
