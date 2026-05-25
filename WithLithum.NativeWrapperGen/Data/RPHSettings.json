@@ -1,6 +1,6 @@
 {
   "parameter_types": {
-    "Any": "global::GTA.Native.InputArgument",
+    "Any": "global::Rage.Native.NativeArgument",
     "AnyPointer": "global::System.IntPtr",
     "Void": "void",
     "Int": "int",
