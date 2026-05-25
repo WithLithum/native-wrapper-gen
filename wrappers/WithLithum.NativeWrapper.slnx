@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="WithLithum.NativeWrapper.RagePluginHook/WithLithum.NativeWrapper.RagePluginHook.csproj" />
   <Project Path="WithLithum.NativeWrapper/WithLithum.NativeWrapper.csproj" />
 </Solution>
