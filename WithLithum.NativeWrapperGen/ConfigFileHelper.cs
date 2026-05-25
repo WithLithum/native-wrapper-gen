@@ -54,7 +54,7 @@ public static class ConfigFileHelper
             return LoadFileInternal(customFile, ScriptCommandInfoContext.Default.GeneratorSettings);
         }
 
-        return LoadDataInternal("SHVDNSettings.json",
+        return LoadDataInternal(fileName,
             ScriptCommandInfoContext.Default.GeneratorSettings);
     }
 }
