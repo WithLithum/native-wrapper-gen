@@ -41,7 +41,7 @@
     "Vector3": "global::Rage.Vector3"
   },
   "return_types": {
-    "Any": "object",
+    "Any": "int",
     "AnyPointer": "global::System.IntPtr",
     "Void": "void",
     "Int": "int",
