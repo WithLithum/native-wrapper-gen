@@ -1,12 +1,16 @@
 # Native Wrapper Generator
 
-Generates native function wrappers for [Script Hook V .NET](https://github.com/scripthookvdotnet/scripthookvdotnet) and compatible script hook wrappers.
+This program generates wrapper methods for native function, to be used with .NET script hook (wrappers) that works with Grand Theft Auto V Legacy.
 
-Compared to the [old generator](https://github.com/NativeFx/InteropGenerator) that was written all the way back 3 years ago, this new generator:
+Currently, the following platforms are supported:
 
-* runs faster (the actual generator cost less than half a second, and the process only takes a few seconds)
-* generates code that compiles without `<LangVersion>latest</LangVersion>`
-* pre-cached `Hash` instances eliminating the need to cast at runtime
+- [Script Hook V .NET](https://github.com/scripthookvdotnet/scripthookvdotnet) and compatibles
+- RAGE Plugin Hook
+
+Compared to the [old generator](https://github.com/NativeFx/InteropGenerator) that was made 3 years ago, this generator:
+
+* runs faster (the actual generator cost less than 300ms in most runs, and the process only takes a few seconds)
+* Generates C# 7.3 code (no need for `<LangVersion>latest</LangVersion>`)
 
 ## Usage
 
