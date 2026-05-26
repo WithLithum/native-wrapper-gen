@@ -20,14 +20,14 @@ jobs:
     - name: Restore dependencies (root)
       run: dotnet restore
     - name: Generate wrappers
-      run: pwsh "${{ github.workspace }}/GenerateNativeWrapper.ps1"
+      run: "pwsh \"${{ github.workspace }}\\GenerateNativeWrapper.ps1\""
     - name: Submit NuGet packages
-      run: dotnet nuget push "${{ github.workspace }}\bin\*.nupkg" --skip-duplicate --source "https://nuget.pkg.github.com/WithLithum/index.json" --api-key ${{ github.token }}
+      run: "dotnet nuget push \"${{ github.workspace }}\\bin\\*.nupkg\" --skip-duplicate --source \"https://nuget.pkg.github.com/WithLithum/index.json\" --api-key ${{ github.token }}"
     - name: Publish artefact
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # 7.0.1
       with:
         name: For_player.zip
-        path: ${{ github.workspace }}/bin/NativeWrapper.zip
+        path: "${{ github.workspace }}\\bin\\NativeWrapper.zip"
         if-no-files-found: warn
         archive: false
 
