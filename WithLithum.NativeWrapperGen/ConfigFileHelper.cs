@@ -46,14 +46,15 @@ public static class ConfigFileHelper
             ScriptCommandInfoContext.Default.ScriptCommandManifest);
     }
 
-    public static GeneratorSettings? LoadShvdnSettings(string? customFile = null)
+    public static GeneratorSettings? LoadDefaultSettingsFile(string fileName,
+        string? customFile = null)
     {
         if (!string.IsNullOrWhiteSpace(customFile))
         {
             return LoadFileInternal(customFile, ScriptCommandInfoContext.Default.GeneratorSettings);
         }
 
-        return LoadDataInternal("SHVDNSettings.json",
+        return LoadDataInternal(fileName,
             ScriptCommandInfoContext.Default.GeneratorSettings);
     }
 }

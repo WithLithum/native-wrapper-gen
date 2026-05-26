@@ -11,6 +11,12 @@ namespace WithLithum.NativeWrapperGen;
 
 internal static class Program
 {
+    private static readonly Dictionary<string, Func<GeneratorSettings, IShimGenerator>> GeneratorNames = new()
+    {
+        { "shvdn", static settings => new VDotNetGenerator(settings) },
+        { "rph", static settings => new RageGenerator(settings) }
+    };
+
     private const string DefaultFileNameFormat = "Natives.{0}.cs";
     private const string DefaultNameSpace = "WithLithum.NativeWrapperGen.Artefact";
     private const string DefaultClassName = "Natives";
@@ -50,6 +56,21 @@ internal static class Program
         Description = "Counts total time cost of generation."
     };
 
+    private static readonly Option<string> GeneratorOption = new("-g", "--generator")
+    {
+        Description = "Specifies the generator to use.",
+        DefaultValueFactory = _ => "shvdn",
+        Validators = {
+            o => {
+                var v = o.GetValueOrDefault<string>();
+                if (!string.IsNullOrWhiteSpace(v) && !GeneratorNames.ContainsKey(v))
+                {
+                    o.AddError("Unknown generator");
+                }
+            }
+        }
+    };
+
 
     private static int Main(string[] args)
     {
@@ -62,7 +83,8 @@ internal static class Program
                 FileNameFormatOption,
                 NamespaceOption,
                 ClassNameOption,
-                CountTimeOption
+                CountTimeOption,
+                GeneratorOption
             }
         };
 
@@ -81,6 +103,7 @@ internal static class Program
         var nameSpace = result.GetValue(NamespaceOption);
         var className = result.GetValue(ClassNameOption);
         var countTime = result.GetValue(CountTimeOption);
+        var generator = result.GetValue(GeneratorOption) ?? "shvdn";
 
         // Command logic.
         ScriptCommandManifest? information;
@@ -89,7 +112,8 @@ internal static class Program
         try
         {
             information = ConfigFileHelper.LoadManifest(defFile);
-            settings = ConfigFileHelper.LoadShvdnSettings(configFile);
+            settings = ConfigFileHelper.LoadDefaultSettingsFile($"{generator.ToUpperInvariant()}Settings.json",
+                configFile);
         }
         catch (Exception ex)
         {
@@ -106,11 +130,14 @@ internal static class Program
             return;
         }
 
+        var hookGenerator = GeneratorNames.GetValueOrDefault(generator)?.Invoke(settings)
+            ?? new VDotNetGenerator(settings);
+
         var multiGenerator = new MultiWrapperFileGenerator(fileNameFormat ?? DefaultFileNameFormat,
-        nameSpace ?? DefaultNameSpace,
-        className ?? DefaultClassName,
-        settings,
-        new VDotNetGenerator(settings));
+            nameSpace ?? DefaultNameSpace,
+            className ?? DefaultClassName,
+            settings,
+            hookGenerator);
 
         Stopwatch? stopwatch = null;
         if (countTime)
