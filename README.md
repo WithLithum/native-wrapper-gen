@@ -16,6 +16,7 @@ Compared to the [old generator](https://github.com/NativeFx/InteropGenerator) th
 WithLithum.NativeWrapperGen
   [--natives-file <natives-json-file>]
   [--config-file <config-json-file>]
+  [--generator <generator-name>]
   [--file-name-format <file-name-format>]
   [--namespace <namespace>]
   [--class-name <class-name>]
@@ -35,6 +36,12 @@ WithLithum.NativeWrapperGen
   Specifies the configuration file. For an example, see [the default settings tailored for SHVDN](WithLithum.NativeWrapperGen/Data/SHVDNSettings.json).
 
   Defaults to read the included settings.
+
+* **generator**: `--generator <generator-name>`
+
+  Specifies the name of the generator to use. The following is available:
+  * `shvdn`: for Script Hook V .NET
+  * `rph`: for RAGE Plugin Hook
 
 * **file-name-format**: `--file-name-format <file-name-format>`
 
