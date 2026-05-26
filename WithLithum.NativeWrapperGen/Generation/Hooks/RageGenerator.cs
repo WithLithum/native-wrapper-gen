@@ -58,14 +58,20 @@ public sealed partial class RageGenerator : CSharpGenerator
     // Use 'for' loop for speed.
     // ReSharper disable once ForCanBeConvertedToForeach
     private static void WriteNativeCallPointerArguments(in WrapperEmitContext context,
-        TextWriter writer)
+        TextWriter writer,
+        bool determineFirst)
     {
+        var first = false;
         var paramList = context.CommandInfo.Parameters;
         for (var i = 0; i < paramList.Count; i++)
         {
             var param = paramList[i];
-            writer.Write(',');
-            writer.Write(' ');
+            if (first || !determineFirst)
+            {
+                writer.Write(',');
+                writer.Write(' ');
+            }
+            first = true;
             if (ParamUtil.IsPointerType(param.Type))
             {
                 writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
@@ -77,58 +83,11 @@ public sealed partial class RageGenerator : CSharpGenerator
         }
     }
 
-    private void WriteWrapperBodyWithPointer(in WrapperEmitContext context,
-        TextWriter writer)
+
+    private void WriteDereference(TextWriter writer, IReadOnlyList<ScriptCommandParameterInfo> parameters)
     {
-        if (writer == null)
-        {
-            throw new InvalidOperationException("Writer not yet initialized.");
-        }
-
-        writer.WriteLine("{");
-
-        // Generate ref shim variables
-        WriteParameterShims(context.CommandInfo.Parameters, writer);
-
-        // Create return type variable if necessary
-        if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
-        {
-            writer.Write(context.ReturnTypeString);
-            writer.Write(' ');
-            writer.Write(ReturnValueVariable);
-            writer.WriteLine(';');
-        }
-
-        // Store return value in variable
-        if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
-        {
-            writer.Write("{0} = ", ReturnValueVariable);
-        }
-
-        writer.Write(NativeCallMethod);
-
-        // Return type
-        writer.Write('<');
-
-        // Per https://docs.ragepluginhook.net/html/M_Rage_Native_NativeFunction_CallByHash__1.htm
-        // "If the native doesn't return a value pass int."
-        writer.Write(context.CommandInfo.ReturnType == ScriptCommandReturnType.Void
-            ? "int"
-            : context.ReturnTypeString);
-
-        writer.Write('>');
-
-        // Arguments
-        writer.Write('(');
-        writer.Write(context.Hash);
-
-        WriteNativeCallPointerArguments(context, writer);
-
-        writer.WriteLine(");"); // end arguments
-
-        // Assign pointer values back to ref params
-        foreach (var param in context.CommandInfo.Parameters
-                     .Where(static x => ParamUtil.IsPointerType(x.Type)))
+        foreach (var param in parameters
+                             .Where(static x => ParamUtil.IsPointerType(x.Type)))
         {
             writer.WriteEscapedName(param.Name);
             writer.Write(" = ");
@@ -146,6 +105,74 @@ public sealed partial class RageGenerator : CSharpGenerator
             writer.Write(".Dispose();");
             writer.WriteLine();
         }
+    }
+
+    private void WriteWrapperBodyWithPointer(in WrapperEmitContext context,
+        TextWriter writer)
+    {
+        var commandInfo = context.CommandInfo;
+        var returnNotVoid = commandInfo.ReturnType != ScriptCommandReturnType.Void;
+        var isComplex = commandInfo.ReturnType == ScriptCommandReturnType.String;
+
+        if (writer == null)
+        {
+            throw new InvalidOperationException("Writer not yet initialized.");
+        }
+
+        writer.WriteLine("{");
+
+        // Generate ref shim variables
+        WriteParameterShims(commandInfo.Parameters, writer);
+
+        // Create return type variable if necessary
+        if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
+        {
+            writer.Write(context.ReturnTypeString);
+            writer.Write(' ');
+            writer.Write(ReturnValueVariable);
+            writer.WriteLine(';');
+        }
+
+        // Store return value in variable
+        if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
+        {
+            writer.Write("{0} = ", ReturnValueVariable);
+        }
+
+        if (isComplex)
+        {
+            writer.Write("global::Rage.Native.NativeFunction.Natives.");
+            writer.Write(context.SymbolNameHash);
+        }
+        else
+        {
+            writer.Write(NativeCallMethod);
+        }
+
+        // Return type
+        if (returnNotVoid || !isComplex)
+        {
+            writer.Write('<');
+            writer.Write(returnNotVoid
+                ? context.ReturnTypeString
+                : "int");
+            writer.Write(">");
+        }
+
+        // Arguments
+        writer.Write('(');
+        if (!isComplex)
+        {
+            writer.Write(context.Hash);
+        }
+
+        WriteNativeCallPointerArguments(context, writer, isComplex);
+
+        writer.WriteLine(");"); // end arguments
+
+        // Assign pointer values back to ref params
+        var parameters = commandInfo.Parameters;
+        WriteDereference(writer, parameters);
 
         // Return retVal
         if (context.CommandInfo.ReturnType != ScriptCommandReturnType.Void)
@@ -160,33 +187,57 @@ public sealed partial class RageGenerator : CSharpGenerator
 
     #region Non-pointer body
 
+
     private static void WriteWrapperBodyNoPointer(in WrapperEmitContext context,
         TextWriter writer)
     {
         var commandInfo = context.CommandInfo;
+        var returnNotVoid = commandInfo.ReturnType != ScriptCommandReturnType.Void;
 
         writer.WriteLine("{");
         writer.Write(commandInfo.ReturnType != ScriptCommandReturnType.Void
             ? "return "
             : "_ = ");
 
-        writer.Write(NativeCallMethod);
+        // Determine the semantic we want to use. If we can't easily support using CallByHash, use
+        // the dynamic syntax. This will be slower.
+        var isComplex = commandInfo.ReturnType == ScriptCommandReturnType.String;
+        if (isComplex)
+        {
+            writer.Write("global::Rage.Native.NativeFunction.Natives.");
+            writer.Write(context.SymbolNameHash);
+        }
+        else
+        {
+            writer.Write(NativeCallMethod);
+        }
 
         // Return type!
-        writer.Write('<');
-        writer.Write(commandInfo.ReturnType != ScriptCommandReturnType.Void
-            ? context.ReturnTypeString
-            : "int");
-        writer.Write(">");
+        if (returnNotVoid || !isComplex)
+        {
+            writer.Write('<');
+            writer.Write(returnNotVoid
+                ? context.ReturnTypeString
+                : "int");
+            writer.Write(">");
+        }
 
         // Call
         writer.Write('(');
-        writer.Write(context.Hash);
+        if (!isComplex)
+        {
+            writer.Write(context.Hash);
+        }
 
+        var first = false;
         foreach (var param in commandInfo.Parameters)
         {
-            writer.Write(',');
-            writer.Write(' ');
+            if (!isComplex || first)
+            {
+                writer.Write(',');
+            }
+
+            first = true;
             writer.WriteEscapedName(param.Name);
         }
 
