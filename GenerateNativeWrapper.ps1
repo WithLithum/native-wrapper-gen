@@ -5,7 +5,8 @@ param (
 
 if (!(Test-Path "NWG_WORK" -PathType Container)) {
     $newDir = New-Item -Type Directory -Path 'NWG_WORK'
-} else {
+}
+else {
     $newDir = Get-Item -Path 'NWG_WORK'
 }
 
@@ -26,9 +27,14 @@ $artefactPath = Join-Path -Path $PWD -ChildPath "NWG_WORK\bin"
 $binPath = Join-Path -Path $PWD -ChildPath "bin"
 
 # Ensure bin exists
-if (!(Test-Path $binPath -PathType Container))
-{
+if (!(Test-Path $binPath -PathType Container)) {
     New-Item -Path $PWD -Name "bin" -ItemType Directory
+}
+
+dotnet restore ".\wrappers\WithLithum.NativeWrapper.slnx"
+if (!$?) {
+    Write-Host -ForegroundColor Red -Object "Restore failed"
+    Exit 1
 }
 
 function Write-Wrappers {
@@ -41,15 +47,15 @@ function Write-Wrappers {
     $wrapperPath = Join-Path -Path $projectPath -ChildPath "Natives.{0}.cs"
 
     dotnet run `
-    --project "WithLithum.NativeWrapperGen" `
-    --configuration Release `
-    -v q `
-    -- `
-    --natives-file "${nativesJsonPath}" `
-    --namespace WithLithum.NativeWrapper `
-    --class-name Natives `
-    --generator "$Generator" `
-    --file-name-format "$wrapperPath"
+        --project "WithLithum.NativeWrapperGen" `
+        --configuration Release `
+        -v q `
+        --no-restore `
+        --natives-file "${nativesJsonPath}" `
+        --namespace WithLithum.NativeWrapper `
+        --class-name Natives `
+        --generator "$Generator" `
+        --file-name-format "$wrapperPath"
 
     if (!$?) {
         Write-Host -ForegroundColor Red -Object "Generator for $Project ($Generator) failed"
@@ -61,11 +67,11 @@ function Write-Wrappers {
     $outPath = Join-Path -Path $artefactPath -ChildPath "$generator"
 
     dotnet build `
-    "$csprojPath" `
-    --configuration Release `
-    --nologo `
-    --output $outPath `
-    --verbosity minimal
+        "$csprojPath" `
+        --configuration Release `
+        --nologo `
+        --output $outPath `
+        --verbosity minimal
 
     if (!$?) {
         Write-Host -ForegroundColor Red -Object "Build for $Project ($Generator) failed"
