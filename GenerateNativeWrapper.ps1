@@ -70,6 +70,7 @@ function Write-Wrappers {
         "$csprojPath" `
         --configuration Release `
         --nologo `
+        --no-restore `
         --output $outPath `
         --verbosity minimal
 
