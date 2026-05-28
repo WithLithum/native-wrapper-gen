@@ -22,7 +22,7 @@ public class SettingTests
     };
 
     [Fact]
-    public void GetParamTypeName_AnyType_ReturnsHandleType()
+    public void GetParamTypeName_Any_ReturnsAnyType()
     {
         // Arrange
         var settings = Base with { AnyParameterType = "Any" };
@@ -36,7 +36,7 @@ public class SettingTests
     }
 
     [Fact]
-    public void GetReturnTypeName_AnyType_ReturnsHandleType()
+    public void GetReturnTypeName_Any_ReturnsAnyType()
     {
         // Arrange
         var settings = Base with { AnyReturnType = "Any" };
@@ -50,21 +50,21 @@ public class SettingTests
     }
 
     [Fact]
-    public void GetParamTypeName_AnyPointerType_ReturnsHandleType()
+    public void GetParamTypeName_AnyPointer_ReturnsAnyPointerType()
     {
         // Arrange
-        var settings = Base with { HandleType = "PoolHandle" };
-        const SCPT input = SCPT.Entity;
+        var settings = Base with { AnyPointerType = "MyPointer" };
+        const SCPT input = SCPT.AnyPointer;
 
         // Act
         var result = settings.GetTypeName(input);
 
         // Assert
-        Assert.Equal("PoolHandle", result);
+        Assert.Equal("MyPointer", result);
     }
 
     [Fact]
-    public void GetParamTypeName_HandleableType_ReturnsHandleType()
+    public void GetParamTypeName_Handleable_ReturnsHandleType()
     {
         // Arrange
         var settings = Base with { HandleType = "PoolHandle" };
@@ -106,7 +106,7 @@ public class SettingTests
     }
 
     [Fact]
-    public void GetParamTypeName_HashType_ReturnsHandleType()
+    public void GetParamTypeName_Hash_ReturnsHashType()
     {
         // Arrange
         var settings = Base with { HashType = "Hash" };
@@ -120,7 +120,7 @@ public class SettingTests
     }
 
     [Fact]
-    public void GetReturnTypeName_HashType_ReturnsHandleType()
+    public void GetReturnTypeName_Hash_ReturnsHashType()
     {
         // Arrange
         var settings = Base with { HashType = "Hash" };
