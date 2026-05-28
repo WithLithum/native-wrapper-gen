@@ -1,6 +1,7 @@
 // SDPX-FileCopyrightText: 2025-2026 WithLithum
 // SPDX-License-Identifier: Apache-2.0
 
+using System.Text.Json.Serialization;
 using WithLithum.NativeWrapperGen.Generation;
 using SCPT = WithLithum.NativeWrapperGen.Models.ScriptCommandParameterType;
 using SCRT = WithLithum.NativeWrapperGen.Models.ScriptCommandReturnType;
@@ -30,8 +31,14 @@ public sealed record GeneratorTypeSettings
     public required string HandleType { get; init; }
 
     /// <summary>
+    /// Gets the type used for Jenkins-One-At-A-Time (JOAAT) hash values.
+    /// </summary>
+    public required string HashType { get; init; }
+
+    /// <summary>
     /// Gets the type used for <c>Vector3</c> typed parameters and return values.
     /// </summary>
+    [JsonPropertyName("vector3_type")]
     public required string Vector3Type { get; init; }
 
     /// <summary>
@@ -61,15 +68,15 @@ public sealed record GeneratorTypeSettings
             or SCPT.Object
             or SCPT.ScrHandle => HandleType,
 
+            SCPT.Player => PlayerIdType,
+            SCPT.Hash => HashType,
+            SCPT.AnyPointer or SCPT.MutableString => AnyPointerType,
+
             // Primitives
             SCPT.String => "string",
             SCPT.Int => "int",
             SCPT.Float => "float",
             SCPT.Void => "void",
-
-            SCPT.Player => PlayerIdType,
-
-            SCPT.AnyPointer or SCPT.MutableString => AnyPointerType,
 
             _ => AnyParameterType
         };
@@ -94,15 +101,15 @@ public sealed record GeneratorTypeSettings
             or SCRT.Object
             or SCRT.ScrHandle => HandleType,
 
+            SCRT.Player => PlayerIdType,
+            SCRT.Hash => HashType,
+            SCRT.AnyPointer => AnyPointerType,
+
             // Primitives
             SCRT.String => "string",
             SCRT.Int => "int",
             SCRT.Float => "float",
             SCRT.Void => "void",
-
-            SCRT.Player => PlayerIdType,
-
-            SCRT.AnyPointer => AnyPointerType,
 
             _ => AnyReturnType
         };

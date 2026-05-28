@@ -18,6 +18,7 @@ public class SettingTests
         HandleType = "__UNDEFINED__",
         PlayerIdType = "__UNDEFINED__",
         Vector3Type = "__UNDEFINED__",
+        HashType = "__UNDEFINED__",
     };
 
     [Fact]
@@ -74,6 +75,34 @@ public class SettingTests
 
         // Assert
         Assert.Equal("PoolHandle", result);
+    }
+
+    [Fact]
+    public void GetParamTypeName_HashType_ReturnsHandleType()
+    {
+        // Arrange
+        var settings = Base with { HashType = "Hash" };
+        const SCPT input = SCPT.Hash;
+
+        // Act
+        var result = settings.GetTypeName(input);
+
+        // Assert
+        Assert.Equal("Hash", result);
+    }
+
+    [Fact]
+    public void GetReturnTypeName_HashType_ReturnsHandleType()
+    {
+        // Arrange
+        var settings = Base with { HashType = "Hash" };
+        const SCRT input = SCRT.Hash;
+
+        // Act
+        var result = settings.GetTypeName(input);
+
+        // Assert
+        Assert.Equal("Hash", result);
     }
 
     [Fact]
