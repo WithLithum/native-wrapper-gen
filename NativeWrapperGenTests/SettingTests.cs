@@ -78,6 +78,34 @@ public class SettingTests
     }
 
     [Fact]
+    public void GetParamTypeName_Vector3_ReturnsVector3Type()
+    {
+        // Arrange
+        var settings = Base with { Vector3Type = "Vec3" };
+        const SCPT input = SCPT.Vector3;
+
+        // Act
+        var result = settings.GetTypeName(input);
+
+        // Assert
+        Assert.Equal("Vec3", result);
+    }
+
+    [Fact]
+    public void GetReturnTypeName_Vector3_ReturnsVector3Type()
+    {
+        // Arrange
+        var settings = Base with { Vector3Type = "Vec3" };
+        const SCRT input = SCRT.Vector3;
+
+        // Act
+        var result = settings.GetTypeName(input);
+
+        // Assert
+        Assert.Equal("Vec3", result);
+    }
+
+    [Fact]
     public void GetParamTypeName_HashType_ReturnsHandleType()
     {
         // Arrange
@@ -103,6 +131,42 @@ public class SettingTests
 
         // Assert
         Assert.Equal("Hash", result);
+    }
+
+    [Theory]
+    [InlineData(SCPT.Boolean, "bool")]
+    [InlineData(SCPT.Int, "int")]
+    [InlineData(SCPT.Float, "float")]
+    [InlineData(SCPT.String, "string")]
+    public void GetParameterTypeName_Primitive_ReturnsCorrespondingType(SCPT input,
+        string expected)
+    {
+        // Arrange
+        var settings = Base;
+
+        // Act
+        var result = settings.GetTypeName(input);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(SCRT.Boolean, "bool")]
+    [InlineData(SCRT.Int, "int")]
+    [InlineData(SCRT.Float, "float")]
+    [InlineData(SCRT.String, "string")]
+    public void GetReturnTypeName_Primitive_ReturnsCorrespondingType(SCRT input,
+        string expected)
+    {
+        // Arrange
+        var settings = Base;
+
+        // Act
+        var result = settings.GetTypeName(input);
+
+        // Assert
+        Assert.Equal(expected, result);
     }
 
     [Fact]
