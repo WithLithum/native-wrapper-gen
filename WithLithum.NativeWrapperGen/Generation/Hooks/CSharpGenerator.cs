@@ -45,7 +45,9 @@ public abstract class CSharpGenerator : IShimGenerator
     protected void WriteParameter(ScriptCommandParameterInfo parameterInfo,
         TextWriter writer)
     {
-        if (ParamUtil.IsPointerType(parameterInfo.Type))
+        // AnyPointer is to be written as IntPtr
+        if (parameterInfo.Type != ScriptCommandParameterType.AnyPointer
+            && ParamUtil.IsPointerType(parameterInfo.Type))
         {
             WriteParameterInternalByRef(parameterInfo.Type, writer);
         }
