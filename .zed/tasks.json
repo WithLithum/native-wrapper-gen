@@ -3,4 +3,8 @@
     "label": "Run unit tests",
     "command": "dotnet test",
   },
+  {
+    "label": "Run benchmarks",
+    "command": "dotnet run --project Benchmarks --configuration Release",
+  },
 ]

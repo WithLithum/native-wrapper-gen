@@ -8,23 +8,8 @@ using WithLithum.NativeWrapperGen.Models;
 
 namespace Benchmarks;
 
-public class VDotNetGenerateToNull
+public class GenerateToNull
 {
-    private static readonly GeneratorSettings Settings =
-        new()
-        {
-            ReturnTypes = new Dictionary<ScriptCommandReturnType, string>
-            {
-                { ScriptCommandReturnType.Void, "void" }
-            },
-            ParameterTypes = new Dictionary<ScriptCommandParameterType, string>
-            {
-                { ScriptCommandParameterType.Int, "int" },
-                { ScriptCommandParameterType.Float, "float" }
-            },
-            Accessibility = "public"
-        };
-
     private static readonly IReadOnlyDictionary<string, ScriptCommandInfo> SampleData =
         new Dictionary<string, ScriptCommandInfo>
         {
@@ -51,11 +36,11 @@ public class VDotNetGenerateToNull
 
     private readonly WrapperFileGenerator _generator;
 
-    public VDotNetGenerateToNull()
+    public GenerateToNull()
     {
         _generator = new WrapperFileGenerator(TextWriter.Null,
-            Settings,
-            new VDotNetGenerator(Settings));
+            VDotNetGenerator.DefaultSettings,
+            new VDotNetGenerator(VDotNetGenerator.DefaultSettings));
     }
 
     [Benchmark]
