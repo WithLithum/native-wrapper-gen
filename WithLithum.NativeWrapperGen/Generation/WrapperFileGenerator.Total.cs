@@ -21,11 +21,9 @@ partial class WrapperFileGenerator
 
     private string GetStringForType(ScriptCommandReturnType returnType)
     {
-        return _settings.ReturnTypes.TryGetValue(returnType, out var writeType)
-            ? writeType
-            : returnType.ToString();
+        return _settings.TypeSettings.GetTypeName(returnType);
     }
-    
+
     private WrapperEmitContext CreateContext(string hash, ScriptCommandInfo commandInfo)
     {
         return new WrapperEmitContext

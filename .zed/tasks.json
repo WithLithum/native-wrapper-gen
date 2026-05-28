@@ -1,0 +1,6 @@
+[
+  {
+    "label": "Run unit tests",
+    "command": "dotnet test",
+  },
+]

@@ -18,26 +18,6 @@ public static class DocGenerator
         '\'',
         '\n'
     ];
-    
-    private static string GetStringForType(ScriptCommandParameterType paramType,
-        GeneratorSettings settings,
-        bool stripRef = false)
-    {
-        while (true)
-        {
-            // ReSharper disable once InvertIf
-            if (stripRef && ParamUtil.PointerToRegularMap.TryGetValue(paramType, out var resultType))
-            {
-                paramType = resultType;
-                stripRef = false;
-                continue;
-            }
-
-            return settings.ParameterTypes.TryGetValue(paramType, out var writeType)
-                ? writeType
-                : paramType.ToString();
-        }
-    }
 
     public static void WriteEscapedForDocumentation(string comment,
         TextWriter writer)
@@ -64,7 +44,7 @@ public static class DocGenerator
             writer.Write(c);
         }
     }
-    
+
     private static void WriteRemarkEntry(string property,
         string value,
         TextWriter writer)
@@ -77,7 +57,7 @@ public static class DocGenerator
         writer.Write(SecurityElement.Escape(value));
         writer.WriteLine("<br />");
     }
-    
+
     public static void WriteDocumentation(in WrapperEmitContext context,
         TextWriter writer,
         GeneratorSettings settings)
@@ -92,7 +72,7 @@ public static class DocGenerator
             writer.Write("/// ");
             WriteEscapedForDocumentation(commandInfo.Comment, writer);
             writer.WriteLine();
-            
+
             writer.WriteLine("/// </summary>");
         }
 
@@ -104,7 +84,7 @@ public static class DocGenerator
             writer.Write("\">An instance of <c>");
             writer.Write(param.Type.ToString());
             writer.Write("</c> as represented in CLR type <c>");
-            writer.Write(GetStringForType(param.Type, settings, true));
+            writer.Write(settings.TypeSettings.GetStringForType(param.Type, true));
             writer.WriteLine("</c>.</param>");
         }
 

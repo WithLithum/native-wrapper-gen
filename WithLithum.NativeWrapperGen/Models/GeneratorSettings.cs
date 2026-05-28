@@ -11,11 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+using System.Text.Json.Serialization;
+using WithLithum.NativeWrapperGen.Models.Settings;
+
 namespace WithLithum.NativeWrapperGen.Models;
 
 public record GeneratorSettings
 {
-    public required ReturnTypeConversionTable ReturnTypes { get; init; }
-    public required ParameterTypeConversionTable ParameterTypes { get; init; }
+    public required GeneratorTypeSettings TypeSettings { get; init; }
+
     public required string Accessibility { get; init; }
 }
