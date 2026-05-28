@@ -3,8 +3,6 @@ name: Create wrappers
 on:
   push:
     branches: [ trunk ]
-  pull_request:
-    branches: [ trunk ]
 
 permissions:    
   packages: write
