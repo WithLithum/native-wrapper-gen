@@ -3,6 +3,7 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
+using WithLithum.NativeWrapperGen.Generation.Hooks;
 using WithLithum.NativeWrapperGen.Models;
 using WithLithum.NativeWrapperGen.Serialization;
 
@@ -46,15 +47,19 @@ public static class ConfigFileHelper
             ScriptCommandInfoContext.Default.ScriptCommandManifest);
     }
 
-    public static GeneratorSettings? LoadDefaultSettingsFile(string fileName,
-        string? customFile = null)
+    public static GeneratorSettings? LoadSettingsFile(string fileName)
     {
-        if (!string.IsNullOrWhiteSpace(customFile))
-        {
-            return LoadFileInternal(customFile, ScriptCommandInfoContext.Default.GeneratorSettings);
-        }
-
-        return LoadDataInternal(fileName,
-            ScriptCommandInfoContext.Default.GeneratorSettings);
+        return LoadFileInternal(fileName, ScriptCommandInfoContext.Default.GeneratorSettings);
     }
+
+    internal static GeneratorSettings? GetDefault(string generator)
+    {
+        return generator switch
+        {
+            VDotNetGenerator.Id => VDotNetGenerator.DefaultSettings,
+            RageGenerator.Id => RageGenerator.DefaultSettings,
+            _ => null,
+        };
+    }
+
 }

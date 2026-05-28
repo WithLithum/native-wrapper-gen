@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System.CommandLine;
+using System.CommandLine.Parsing;
 using System.Diagnostics;
 using WithLithum.NativeWrapperGen.Generation;
 using WithLithum.NativeWrapperGen.Generation.Hooks;
@@ -13,24 +14,35 @@ internal static class Program
 {
     private static readonly Dictionary<string, Func<GeneratorSettings, IShimGenerator>> GeneratorNames = new()
     {
-        { "shvdn", static settings => new VDotNetGenerator(settings) },
-        { "rph", static settings => new RageGenerator(settings) }
+        { VDotNetGenerator.Id , static settings => new VDotNetGenerator(settings) },
+        { RageGenerator.Id, static settings => new RageGenerator(settings) }
     };
 
     private const string DefaultFileNameFormat = "Natives.{0}.cs";
     private const string DefaultNameSpace = "WithLithum.NativeWrapperGen.Artefact";
     private const string DefaultClassName = "Natives";
 
+    private static readonly Action<OptionResult> FileValidator = ctx =>
+    {
+        var value = ctx.GetValueOrDefault<string>();
+        if (!string.IsNullOrWhiteSpace(value) && !File.Exists(value))
+        {
+            ctx.AddError($"File '{value}' does not exist");
+        }
+    };
+
     private static readonly Option<string?> DefinitionFileOption = new("--natives-file")
     {
         Description = "An 'alloc8or/gta5-natives-data' conforming 'natives.json' file. Uses the one bundled in 'Data' directory if not specified.",
-        DefaultValueFactory = _ => null
+        DefaultValueFactory = _ => null,
+        Validators = { FileValidator }
     };
 
     private static readonly Option<string?> ConfigFileOption = new("--config-file")
     {
-        Description = "A generator config file. Uses the one bundled in 'Data' directory if not specified.",
-        DefaultValueFactory = _ => null
+        Description = "A generator config file. Uses default settings if not specified.",
+        DefaultValueFactory = _ => null,
+        Validators = { FileValidator }
     };
 
     private static readonly Option<string> FileNameFormatOption = new("--file-name-format")
@@ -112,8 +124,9 @@ internal static class Program
         try
         {
             information = ConfigFileHelper.LoadManifest(defFile);
-            settings = ConfigFileHelper.LoadDefaultSettingsFile($"{generator.ToUpperInvariant()}Settings.json",
-                configFile);
+            settings = string.IsNullOrWhiteSpace(configFile)
+                ? ConfigFileHelper.GetDefault(generator)
+                : ConfigFileHelper.LoadSettingsFile(configFile);
         }
         catch (Exception ex)
         {

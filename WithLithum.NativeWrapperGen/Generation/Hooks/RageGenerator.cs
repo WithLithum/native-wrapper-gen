@@ -7,6 +7,22 @@ namespace WithLithum.NativeWrapperGen.Generation.Hooks;
 
 public sealed partial class RageGenerator : CSharpGenerator
 {
+    public const string Id = "rph";
+    public static readonly GeneratorSettings DefaultSettings = new()
+    {
+        TypeSettings = new()
+        {
+            AnyParameterType = "global::Rage.Native.NativeArgument",
+            AnyPointerType = "global::System.IntPtr",
+            AnyReturnType = "int",
+            HandleType = "uint",
+            HashType = "uint",
+            Vector3Type = "global::Rage.Vector3",
+            PlayerIdType = "int"
+        },
+        Accessibility = "public"
+    };
+
     private const string NativeCallMethod = "global::Rage.Native.NativeFunction.CallByHash";
 
     public RageGenerator(GeneratorSettings settings) : base(settings)
