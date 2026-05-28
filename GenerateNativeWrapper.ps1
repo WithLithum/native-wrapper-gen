@@ -66,13 +66,24 @@ function Write-Wrappers {
     $csprojPath = Join-Path -Path $projectPath -ChildPath "$($project).csproj"
     $outPath = Join-Path -Path $artefactPath -ChildPath "$generator"
 
-    dotnet build `
+    if ($env:CI) {
+        dotnet build `
+        "$csprojPath" `
+        --configuration Release `
+        --nologo `
+        --no-restore `
+        --output $outPath `
+        --verbosity minimal `
+        --version-suffix "snapshot-$($env:GITHUB_RUN_NUMBER)"
+    } else {
+        dotnet build `
         "$csprojPath" `
         --configuration Release `
         --nologo `
         --no-restore `
         --output $outPath `
         --verbosity minimal
+    }
 
     if (!$?) {
         Write-Host -ForegroundColor Red -Object "Build for $Project ($Generator) failed"
