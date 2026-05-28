@@ -71,12 +71,14 @@ public sealed record GeneratorTypeSettings
             SCPT.Player => PlayerIdType,
             SCPT.Hash => HashType,
             SCPT.AnyPointer or SCPT.MutableString => AnyPointerType,
+            SCPT.Vector3 => Vector3Type,
 
             // Primitives
             SCPT.String => "string",
             SCPT.Int => "int",
             SCPT.Float => "float",
             SCPT.Void => "void",
+            SCPT.Boolean => "bool",
 
             _ => AnyParameterType
         };
@@ -104,12 +106,14 @@ public sealed record GeneratorTypeSettings
             SCRT.Player => PlayerIdType,
             SCRT.Hash => HashType,
             SCRT.AnyPointer => AnyPointerType,
+            SCRT.Vector3 => Vector3Type,
 
             // Primitives
             SCRT.String => "string",
             SCRT.Int => "int",
             SCRT.Float => "float",
             SCRT.Void => "void",
+            SCRT.Boolean => "bool",
 
             _ => AnyReturnType
         };
