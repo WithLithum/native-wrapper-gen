@@ -8,6 +8,9 @@ using SCRT = WithLithum.NativeWrapperGen.Models.ScriptCommandReturnType;
 
 namespace WithLithum.NativeWrapperGen.Models.Settings;
 
+/// <summary>
+/// Configures type mapping for shim generators.
+/// </summary>
 public sealed record GeneratorTypeSettings
 {
     /// <summary>
@@ -46,9 +49,25 @@ public sealed record GeneratorTypeSettings
     /// </summary>
     public required string PlayerIdType { get; init; }
 
+    /// <summary>
+    /// Gets a dictionary that overrides type mapping for return types.
+    /// </summary>
     public ReturnTypeConversionTable? ReturnTypeOverrides { get; init; }
+
+    /// <summary>
+    /// Gets a dictionary that overrides type mapping for parameter types.
+    /// </summary>
     public ParameterTypeConversionTable? ParameterTypeOverrides { get; init; }
 
+    /// <summary>
+    /// Maps the specified parameter type to its CLR representation according to the settings of
+    /// the current instance.
+    /// </summary>
+    /// <param name="paramType">The type of the parameter to map.</param>
+    /// <returns>
+    /// The mapped CLR representation name. If the type cannot be mapped, returns
+    /// <see cref="AnyParameterType"/>.
+    /// </returns>
     public string GetTypeName(SCPT paramType)
     {
         if (ParameterTypeOverrides?.TryGetValue(paramType, out var overriddenType) == true)
@@ -84,14 +103,23 @@ public sealed record GeneratorTypeSettings
         };
     }
 
-    public string GetTypeName(SCRT paramType)
+    /// <summary>
+    /// Maps the specified return type to its CLR representation according to the settings of the
+    /// current instance.
+    /// </summary>
+    /// <param name="returnType">The return type to map.</param>
+    /// <returns>
+    /// The mapped CLR representation name. If the type cannot be mapped, returns
+    /// <see cref="AnyReturnType"/>.
+    /// </returns>
+    public string GetTypeName(SCRT returnType)
     {
-        if (ReturnTypeOverrides?.TryGetValue(paramType, out var overriddenType) == true)
+        if (ReturnTypeOverrides?.TryGetValue(returnType, out var overriddenType) == true)
         {
             return overriddenType;
         }
 
-        return paramType switch
+        return returnType switch
         {
             SCRT.Ped
             or SCRT.Vehicle
