@@ -1,10 +1,10 @@
 [
   {
     "label": "Run unit tests",
-    "command": "dotnet test",
+    "command": "dotnet test"
   },
   {
     "label": "Run benchmarks",
-    "command": "dotnet run --project Benchmarks --configuration Release",
-  },
+    "command": "dotnet run --project Benchmarks --configuration Release"
+  }
 ]

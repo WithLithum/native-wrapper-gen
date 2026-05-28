@@ -1,4 +1,4 @@
-﻿// SDPX-FileCopyrightText: 2025-2026 WithLithum
+// SDPX-FileCopyrightText: 2025-2026 WithLithum
 // SPDX-License-Identifier: Apache-2.0
 
 using System.CommandLine;
@@ -115,7 +115,7 @@ internal static class Program
         var nameSpace = result.GetValue(NamespaceOption);
         var className = result.GetValue(ClassNameOption);
         var countTime = result.GetValue(CountTimeOption);
-        var generator = result.GetValue(GeneratorOption) ?? "shvdn";
+        var generator = result.GetValue(GeneratorOption) ?? VDotNetGenerator.Id;
 
         // Command logic.
         ScriptCommandManifest? information;
