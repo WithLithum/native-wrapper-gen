@@ -39,7 +39,7 @@ public abstract class CSharpGenerator : IShimGenerator
         }
 
         writer.Write("ref ");
-        writer.Write(Settings.TypeSettings.GetTypeName(parameterType));
+        writer.Write(Settings.TypeSettings.GetTypeName(regularType));
     }
 
     protected void WriteParameter(ScriptCommandParameterInfo parameterInfo,
