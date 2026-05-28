@@ -4,4 +4,4 @@
 using BenchmarkDotNet.Running;
 using Benchmarks;
 
-BenchmarkRunner.Run<VDotNetGenerateToNull>();
+BenchmarkRunner.Run<GenerateToNull>();

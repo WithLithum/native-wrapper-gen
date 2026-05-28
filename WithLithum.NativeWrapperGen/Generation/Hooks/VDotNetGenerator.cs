@@ -1,4 +1,4 @@
-// SDPX-FileCopyrightText: 2025-2026 WithLithum
+// SPDX-FileCopyrightText: 2025-2026 WithLithum
 // SPDX-License-Identifier: Apache-2.0
 
 using WithLithum.NativeWrapperGen.Models;
@@ -10,6 +10,22 @@ namespace WithLithum.NativeWrapperGen.Generation.Hooks;
 /// </summary>
 public sealed partial class VDotNetGenerator : CSharpGenerator
 {
+    public const string Id = "shvdn";
+    public static readonly GeneratorSettings DefaultSettings = new()
+    {
+        TypeSettings = new()
+        {
+            AnyParameterType = "global::GTA.Native.InputArgument",
+            AnyPointerType = "global::System.IntPtr",
+            AnyReturnType = "object",
+            HandleType = "int",
+            HashType = "int",
+            Vector3Type = "global::GTA.Math.Vector3",
+            PlayerIdType = "int"
+        },
+        Accessibility = "public"
+    };
+
     private const string HashValueFieldFooter = "_Value";
 
     public VDotNetGenerator(GeneratorSettings settings) : base(settings)

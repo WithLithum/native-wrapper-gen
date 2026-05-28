@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025-2026 WithLithum
+// SPDX-License-Identifier: Apache-2.0
+
 using WithLithum.NativeWrapperGen.Models;
 
 namespace WithLithum.NativeWrapperGen.Generation.Hooks;
@@ -17,21 +20,47 @@ public abstract class CSharpGenerator : IShimGenerator
 
     protected string GetStringForType(ScriptCommandParameterType paramType, bool stripRef = false)
     {
-        while (true)
+        if (ParamUtil.PointerToRegularMap.TryGetValue(paramType,
+                out var resultType))
         {
-            // ReSharper disable once InvertIf
-            if (stripRef && ParamUtil.PointerToRegularMap.TryGetValue(paramType,
-                    out var resultType))
-            {
-                paramType = resultType;
-                stripRef = false;
-                continue;
-            }
-
-            return Settings.ParameterTypes.TryGetValue(paramType, out var writeType)
-                ? writeType
-                : paramType.ToString();
+            var resultTypeName = Settings.TypeSettings.GetTypeName(resultType);
+            return stripRef
+                ? resultTypeName
+                : $"ref {resultTypeName}";
         }
+
+        return Settings.TypeSettings.GetTypeName(paramType);
+    }
+
+    private void WriteParameterInternalByRef(ScriptCommandParameterType parameterType,
+        TextWriter writer)
+    {
+        if (!ParamUtil.PointerToRegularMap.TryGetValue(parameterType, out var regularType))
+        {
+            throw new ArgumentException("The specified type is not a pointer type.",
+                nameof(parameterType));
+        }
+
+        writer.Write("ref ");
+        writer.Write(Settings.TypeSettings.GetTypeName(regularType));
+    }
+
+    protected void WriteParameter(ScriptCommandParameterInfo parameterInfo,
+        TextWriter writer)
+    {
+        // AnyPointer is to be written as IntPtr
+        if (parameterInfo.Type != ScriptCommandParameterType.AnyPointer
+            && ParamUtil.IsPointerType(parameterInfo.Type))
+        {
+            WriteParameterInternalByRef(parameterInfo.Type, writer);
+        }
+        else
+        {
+            writer.Write(Settings.TypeSettings.GetTypeName(parameterInfo.Type));
+        }
+
+        writer.Write(' ');
+        writer.WriteEscapedName(parameterInfo.Name);
     }
 
     protected void WriteMethodSignature(in WrapperEmitContext context,
@@ -64,9 +93,7 @@ public abstract class CSharpGenerator : IShimGenerator
                 writer.Write(' ');
             }
 
-            writer.Write(GetStringForType(parameter.Type));
-            writer.Write(' ');
-            writer.WriteEscapedName(parameter.Name);
+            WriteParameter(parameter, writer);
         }
 
         writer.Write(')');

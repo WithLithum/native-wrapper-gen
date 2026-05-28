@@ -68,7 +68,7 @@ internal static class ParamUtil
 
         return false;
     }
-    
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void WriteReturn(this TextWriter writer,
         string context)
