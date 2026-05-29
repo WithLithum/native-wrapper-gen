@@ -2,6 +2,5 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using BenchmarkDotNet.Running;
-using Benchmarks;
 
-BenchmarkRunner.Run<GenerateToNull>();
+BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
