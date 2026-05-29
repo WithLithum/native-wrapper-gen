@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System.Collections.Immutable;
-using System.Security;
 using WithLithum.NativeWrapperGen.Models;
 
 namespace WithLithum.NativeWrapperGen.Generation;
@@ -51,11 +50,29 @@ public static class DocGenerator
     {
         // Property name
         writer.Write("/// <b>");
-        writer.Write(SecurityElement.Escape(property));
+        WriteEscapedForDocumentation(property, writer);
         writer.Write("</b>: ");
 
-        writer.Write(SecurityElement.Escape(value));
+        WriteEscapedForDocumentation(value, writer);
         writer.WriteLine("<br />");
+    }
+
+    private static void WritePreviouslyKnownAs(ScriptCommandInfo commandInfo,
+        TextWriter writer)
+    {
+        if (commandInfo.OldNames == null || commandInfo.OldNames.Count == 0)
+        {
+            return;
+        }
+
+        writer.WriteLine("/// <para><b>Previously known as</b>:<br />");
+        foreach (var oldName in commandInfo.OldNames)
+        {
+            writer.Write($"/// <c>");
+            WriteEscapedForDocumentation(oldName, writer);
+            writer.WriteLine("</c>");
+        }
+        writer.WriteLine("/// </para>");
     }
 
     public static void WriteDocumentation(in WrapperEmitContext context,
@@ -81,11 +98,9 @@ public static class DocGenerator
         {
             writer.Write("/// <param name=\"");
             writer.Write(param.Name);
-            writer.Write("\">An instance of <c>");
+            writer.Write("\"><c>");
             writer.Write(param.Type.ToString());
-            writer.Write("</c> as represented in CLR type <c>");
-            writer.Write(settings.TypeSettings.GetStringForType(param.Type, true));
-            writer.WriteLine("</c>.</param>");
+            writer.WriteLine("</c></param>");
         }
 
         // Remarks
@@ -97,6 +112,7 @@ public static class DocGenerator
         {
             WriteRemarkEntry("Original hash", commandInfo.JenkinsHash, writer);
         }
+        WritePreviouslyKnownAs(commandInfo, writer);
 
         writer.WriteLine("/// </remarks>");
 
@@ -104,11 +120,9 @@ public static class DocGenerator
         // Only write when it indeed has a return value.
         if (commandInfo.ReturnType != ScriptCommandReturnType.Void)
         {
-            writer.Write("/// <returns>An instance of <c>");
+            writer.Write("/// <returns><c>");
             writer.Write(commandInfo.ReturnType.ToString());
-            writer.Write("</c> as represented in CLR type <c>");
-            writer.Write(context.ReturnTypeString);
-            writer.WriteLine("</c>.</returns>");
+            writer.WriteLine("</c></returns>");
         }
     }
 }
