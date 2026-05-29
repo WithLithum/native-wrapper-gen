@@ -12,6 +12,28 @@ Compared to the [old generator](https://github.com/NativeFx/InteropGenerator) th
 * runs faster (the actual generator cost less than 300ms in most runs, and the process only takes a few seconds)
 * Generates C# 7.3 code (no need for `<LangVersion>latest</LangVersion>`)
 
+## Get
+
+Installable archive for pre-built wrappers are available in the [releases](https://github.com/WithLithum/native-wrapper-gen/releases) page. Corresponding developer packages are published on NuGet:
+
+| Platform | Link                                                               |
+| -------- | ------------------------------------------------------------------ |
+| SHVDN    | [WithLithum.NativeWrapper](https://www.nuget.org/packages/WithLithum.NativeWrapper) |
+| RPH      | [WithLithum.NativeWrapper.RagePluginHook](https://www.nuget.org/packages/WithLithum.NativeWrapper.RagePluginHook) |
+
+Pre-built binaries for the native wrapper generator program are not provided. You need to build the project yourself, if you just want the generator.
+
+### Experimental builds
+
+> [!IMPORTANT]
+> Experimental builds are produced _automatically_ for every commit (change) in the `trunk` branch.
+>
+> There is **absolutely no guarantee** that these builds will work with existing scripts, or future experimental builds won't break those built with previous experimental builds.
+
+To get installable archives for experimental builds, click [here](https://github.com/WithLithum/native-wrapper-gen/actions/workflows/create-wrappers.yml) and select the most recent run. You need a GitHub account to download build artefacts.
+
+Developer packages for experimental builds are published in [GitHub Packages](https://github.com/users/WithLithum/packages?repo_name=native-wrapper-gen).
+
 ## Usage
 
 ### Synopsis
@@ -67,11 +89,17 @@ WithLithum.NativeWrapperGen
 
 ## Building
 
-You need .NET SDK that can target 10.0. Any OS can build and run the generator, but GTA V doesn't work on anywhere outside of Windows without Wine or Proton.
+You need a version of .NET SDK that can target .NET 10.0. Download .NET SDK 10.0 [here](https://dotnet.microsoft.com/download/dotnet/10.0).
 
-When building, do *not* build the entire Solution, the build will fail. Build the `WithLithum.NativeWrapperGen` project instead.
+Any OS can build and run the generator.
 
-To build the `NativeWrapper`, run the ps1 script first.
+### Wrappers
+
+The wrappers targets .NET Framework 4.8 and has to be built on Windows because of this. The wrappers are under `wrappers` directory.
+
+To create wrappers, use PowerShell 7 to run `GenerateNativeWrapper.ps1`. If you have ran this script at least once, you can specify `-NoDownload` to tell the script not to update native definition files.
+
+.NET SDK is still required because the generator will be built and ran.
 
 ## Licence
 

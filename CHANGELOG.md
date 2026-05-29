@@ -5,7 +5,25 @@ All notable changes to this project will be documented in this very file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.0-alpha.2] - 2026-05-29
+
+_See the corresponding [`migration guide`](docs/MIGRATION.md#0.3.0) for migrating to this version._
+
+### Added
+
+- Added previously used names of natives in the generated XML documentation.
+
+### Changed
+
+- **BREAKING**: Overhualed how type settings work.
+  - Consolidated the previous one-to-one map into 7 properties which maps to each of the types.
+  - Default configuration files are no longer bundled in the `Data` directory.
+- Buffered streams are now used for writing generated files.
+- Simplified the generated XML documentation.
+
+### Other
+
+- Improved the build process of pre-built wrappers.
 
 ## [0.3.0-alpha.1] - 2026-05-26
 
@@ -67,7 +85,7 @@ return type of the method in question.
 
 _Initial release._
 
-[Unreleased]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.3.0-alpha.1...HEAD
+[0.3.0-alpha.2]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.3.0-alpha.1...v0.3.0-alpha.2
 [0.3.0-alpha.1]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.2.1...v0.3.0-alpha.1
 [0.2.1]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.1.2...v0.2.0
