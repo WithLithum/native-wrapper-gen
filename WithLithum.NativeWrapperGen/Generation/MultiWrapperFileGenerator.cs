@@ -34,7 +34,9 @@ public class MultiWrapperFileGenerator
                 MethodNameConverter.SnakeToPascal(partial.Key)),
                 Directory.GetCurrentDirectory());
 
-            using var writer = File.CreateText(fullPath);
+            using var fileStream = File.Create(fullPath);
+            using var bufferedStream = new BufferedStream(fileStream);
+            using var writer = new StreamWriter(bufferedStream);
 
             var generator = new WrapperFileGenerator(writer,
                 _generatorSettings,
@@ -42,6 +44,7 @@ public class MultiWrapperFileGenerator
             generator.WritePartial(_nameSpace, _className, partial.Value);
 
             writer.Flush();
+            bufferedStream.Flush();
         }
     }
 }
