@@ -66,7 +66,7 @@ function Write-Wrappers {
     $csprojPath = Join-Path -Path $projectPath -ChildPath "$($project).csproj"
     $outPath = Join-Path -Path $artefactPath -ChildPath "$generator"
 
-    if ($env:CI) {
+    if ($env:CI -and !($env:NWG_NOT_NIGHTLY)) {
         dotnet build `
         "$csprojPath" `
         --configuration Release `
