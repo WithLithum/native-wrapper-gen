@@ -15,21 +15,21 @@ namespace WithLithum.NativeWrapperGen.Generation;
 
 public partial class WrapperFileGenerator
 {
-    private void WriteNameSpaceScopeHeader(string nameSpace)
+    private static void WriteNameSpaceScopeHeader(string nameSpace, TextWriter writer)
     {
-        _writer.WriteLine("namespace {0}", nameSpace);
-        _writer.WriteLine('{');
+        writer.WriteLine("namespace {0}", nameSpace);
+        writer.WriteLine('{');
     }
 
-    private void WriteClassScopeHeader(string className)
+    private static void WriteClassScopeHeader(string className, TextWriter writer)
     {
-        _writer.WriteLine("/// <summary>Provides wrappers for GTA V script commands.</summary>");
-        _writer.WriteLine("public static partial class {0}", className);
-        _writer.WriteLine('{');
+        writer.WriteLine("/// <summary>Provides wrappers for GTA V script commands.</summary>");
+        writer.WriteLine("public static partial class {0}", className);
+        writer.WriteLine('{');
     }
 
-    private void WriteScopeFooter()
+    private static void WriteScopeFooter(TextWriter writer)
     {
-        _writer.WriteLine('}');
+        writer.WriteLine('}');
     }
 }

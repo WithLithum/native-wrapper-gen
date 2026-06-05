@@ -28,6 +28,9 @@ public class MultiWrapperFileGenerator
 
     public void GenerateComplete(ScriptCommandManifest manifest)
     {
+        var generator = new WrapperFileGenerator(_generatorSettings,
+            _shimGenerator);
+
         foreach (var partial in manifest)
         {
             var fullPath = Path.GetFullPath(string.Format(_fileNameFormat,
@@ -38,16 +41,12 @@ public class MultiWrapperFileGenerator
             using var bufferedStream = new BufferedStream(fileStream);
             using var writer = new StreamWriter(bufferedStream);
 
-            var generator = new WrapperFileGenerator(writer,
-                _generatorSettings,
-                _shimGenerator);
-
             var context = new WrapperSectionContext
             {
                 Namespace = partial.Key,
                 Commands = partial.Value,
             };
-            generator.WritePartial(_nameSpace, _className, in context);
+            generator.WritePartial(_nameSpace, _className, in context, writer);
 
             writer.Flush();
             bufferedStream.Flush();
