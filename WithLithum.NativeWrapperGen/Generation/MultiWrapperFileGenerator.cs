@@ -1,4 +1,4 @@
-﻿// SDPX-FileCopyrightText: 2025-2026 WithLithum
+// SDPX-FileCopyrightText: 2025-2026 WithLithum
 // SPDX-License-Identifier: Apache-2.0
 
 using WithLithum.NativeWrapperGen.Models;
@@ -13,10 +13,10 @@ public class MultiWrapperFileGenerator
     private readonly GeneratorSettings _generatorSettings;
     private readonly IShimGenerator _shimGenerator;
 
-    public MultiWrapperFileGenerator(string fileNameFormat, 
+    public MultiWrapperFileGenerator(string fileNameFormat,
         string nameSpace,
         string className,
-        GeneratorSettings generatorSettings, 
+        GeneratorSettings generatorSettings,
         IShimGenerator shimGenerator)
     {
         _fileNameFormat = fileNameFormat;
@@ -41,7 +41,13 @@ public class MultiWrapperFileGenerator
             var generator = new WrapperFileGenerator(writer,
                 _generatorSettings,
                 _shimGenerator);
-            generator.WritePartial(_nameSpace, _className, partial.Value);
+
+            var context = new WrapperSectionContext
+            {
+                Namespace = partial.Key,
+                Commands = partial.Value,
+            };
+            generator.WritePartial(_nameSpace, _className, in context);
 
             writer.Flush();
             bufferedStream.Flush();

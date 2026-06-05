@@ -1,4 +1,4 @@
-﻿// SDPX-FileCopyrightText: 2025-2026 WithLithum
+// SDPX-FileCopyrightText: 2025-2026 WithLithum
 // SPDX-License-Identifier: Apache-2.0
 
 using System.Collections.Immutable;
@@ -106,6 +106,7 @@ public static class DocGenerator
         // Remarks
         writer.WriteLine("/// <remarks>");
 
+        WriteRemarkEntry("Namespace", context.Namespace, writer);
         WriteRemarkEntry("Introduced in", commandInfo.Build, writer);
         WriteRemarkEntry("PC hash", context.Hash, writer);
         if (!string.IsNullOrWhiteSpace(commandInfo.JenkinsHash))

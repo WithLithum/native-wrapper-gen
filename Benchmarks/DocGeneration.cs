@@ -44,7 +44,8 @@ public class DocGeneration
             CommandInfo = SampleData,
             Hash = "0x1234567890ABCDEF",
             SymbolNameHash = "x1234567890ABCDEF",
-            ReturnTypeString = "void"
+            ReturnTypeString = "void",
+            Namespace = "TEST",
         };
         DocGenerator.WriteDocumentation(context, TextWriter.Null, VDotNetGenerator.DefaultSettings);
     }

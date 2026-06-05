@@ -46,7 +46,12 @@ public class GenerateToNull
     [Benchmark]
     public void GenerateSample()
     {
-        _generator.WritePartial("TestNamespace", "TestClass", SampleData);
+        var context = new WrapperSectionContext
+        {
+            Namespace = "NS",
+            Commands = SampleData
+        };
+        _generator.WritePartial("TestNamespace", "TestClass", in context);
     }
 
 }
