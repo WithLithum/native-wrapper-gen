@@ -60,7 +60,7 @@ internal static class ParamUtil
         for (int i = 0; i < paramList.Count; i++)
         {
             var param = paramList[i];
-            if (ParamUtil.IsPointerType(param.Type))
+            if (IsPointerType(param.Type))
             {
                 return true;
             }
@@ -108,16 +108,5 @@ internal static class ParamUtil
     internal static bool IsPointerType(SCPT type)
     {
         return PointerToRegularMap.ContainsKey(type);
-    }
-
-    internal static string StripRef(string typeName)
-    {
-        // TODO: This is temporary measure
-        if (!typeName.StartsWith("ref"))
-        {
-            return typeName;
-        }
-
-        return typeName[4..];
     }
 }
