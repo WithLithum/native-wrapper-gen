@@ -38,8 +38,7 @@ public class GenerateToNull
 
     public GenerateToNull()
     {
-        _generator = new WrapperFileGenerator(TextWriter.Null,
-            VDotNetGenerator.DefaultSettings,
+        _generator = new WrapperFileGenerator(VDotNetGenerator.DefaultSettings,
             new VDotNetGenerator(VDotNetGenerator.DefaultSettings));
     }
 
@@ -51,7 +50,8 @@ public class GenerateToNull
             Namespace = "NS",
             Commands = SampleData
         };
-        _generator.WritePartial("TestNamespace", "TestClass", in context);
+        _generator.WritePartial("TestNamespace", "TestClass", in context,
+            TextWriter.Null);
     }
 
 }
