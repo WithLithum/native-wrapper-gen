@@ -4,8 +4,9 @@ env:
   NWG_NOT_NIGHTLY: true
 
 on:
-  release: 
-    types: published
+  push:
+    tags:
+      - v**
 
 jobs:
   build:
@@ -31,12 +32,10 @@ jobs:
         user: ${{ secrets.NUGET_USER }}
     - name: Submit NuGet packages
       run: "dotnet nuget push \"${{ github.workspace }}\\bin\\*.nupkg\" --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{steps.login.outputs.NUGET_API_KEY}}"
-    - name: Publish artefact
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # 7.0.1
+    - name: Publish release
+      uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
       with:
-        name: For_player.zip
-        path: "${{ github.workspace }}\\bin\\NativeWrapper.zip"
-        if-no-files-found: warn
-        archive: false
-
+        draft: true
+        tag_name: ${{ github.ref_name }}
+        files: "${{ github.workspace }}\\bin\\NativeWrapper.zip"
         
