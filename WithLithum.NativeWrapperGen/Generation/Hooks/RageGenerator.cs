@@ -74,7 +74,7 @@ public sealed partial class RageGenerator : CSharpGenerator
     // Use 'for' loop for speed.
     // ReSharper disable once ForCanBeConvertedToForeach
     private static void WriteNativeCallPointerArguments(in WrapperEmitContext context,
-        TextWriter writer,
+        TextWriter writer)
         bool determineFirst)
     {
         var first = false;
@@ -82,12 +82,8 @@ public sealed partial class RageGenerator : CSharpGenerator
         for (var i = 0; i < paramList.Count; i++)
         {
             var param = paramList[i];
-            if (first || !determineFirst)
-            {
-                writer.Write(',');
-                writer.Write(' ');
-            }
-            first = true;
+            writer.Write(", ");
+
             if (ParamUtil.IsPointerType(param.Type))
             {
                 writer.WriteSurround(CommonFieldHeader, param.Name, ShimVariableFooter);
@@ -130,6 +126,11 @@ public sealed partial class RageGenerator : CSharpGenerator
         var returnNotVoid = commandInfo.ReturnType != ScriptCommandReturnType.Void;
         var isComplex = commandInfo.ReturnType == ScriptCommandReturnType.String;
 
+        // Per RPH documentation: write int for void return types.
+        var returnTypeToken = returnNotVoid
+                ? context.ReturnTypeString
+                : "int";
+
         if (writer == null)
         {
             throw new InvalidOperationException("Writer not yet initialized.");
@@ -157,32 +158,33 @@ public sealed partial class RageGenerator : CSharpGenerator
 
         if (isComplex)
         {
-            writer.Write("global::Rage.Native.NativeFunction.Natives.");
-            writer.Write(context.SymbolNameHash);
-        }
-        else
-        {
-            writer.Write(NativeCallMethod);
+            // Write explicit cast
+            writer.Write('(');
+            writer.Write(returnTypeToken);
+            writer.Write(')');
         }
 
-        // Return type
-        if (returnNotVoid || !isComplex)
+            writer.Write(NativeCallMethod);
+
+        // Write normal syntax for value types.
+        if (!isComplex)
         {
             writer.Write('<');
-            writer.Write(returnNotVoid
-                ? context.ReturnTypeString
-                : "int");
+            writer.Write(returnTypeToken);
             writer.Write(">");
         }
 
-        // Arguments
+        // Start writing arguments. Native function call method begins with hash.
         writer.Write('(');
-        if (!isComplex)
-        {
             writer.Write(context.Hash);
+
+        if (isComplex)
+        {
+            writer.Write(',');
+            WriteTypeOf(writer, returnTypeToken);
         }
 
-        WriteNativeCallPointerArguments(context, writer, isComplex);
+        WriteNativeCallPointerArguments(context, writer);
 
         writer.WriteLine(");"); // end arguments
 
@@ -203,57 +205,59 @@ public sealed partial class RageGenerator : CSharpGenerator
 
     #region Non-pointer body
 
-
-    private static void WriteWrapperBodyNoPointer(in WrapperEmitContext context,
+    private void WriteWrapperBodyNoPointer(in WrapperEmitContext context,
         TextWriter writer)
     {
         var commandInfo = context.CommandInfo;
         var returnNotVoid = commandInfo.ReturnType != ScriptCommandReturnType.Void;
 
+        // Per RPH documentation: write int for void return types.
+        var returnTypeToken = returnNotVoid
+                ? context.ReturnTypeString
+                : "int";
+
         writer.WriteLine("{");
-        writer.Write(commandInfo.ReturnType != ScriptCommandReturnType.Void
+        writer.Write(returnNotVoid
             ? "return "
             : "_ = ");
 
-        // Determine the semantic we want to use. If we can't easily support using CallByHash, use
-        // the dynamic syntax. This will be slower.
+        // If the return type is string (reference type) we will have to use the typeof syntax.
+        //
+        // Normal syntax: NativeFunction.CallByHash<ReturnType>(hash, params...)
+        // Typeof syntax: (ReturnType)NativeFunction.CallByHash(hash, typeof(ReturnType), params...)
         var isComplex = commandInfo.ReturnType == ScriptCommandReturnType.String;
+
         if (isComplex)
         {
-            writer.Write("global::Rage.Native.NativeFunction.Natives.");
-            writer.Write(context.SymbolNameHash);
-        }
-        else
-        {
-            writer.Write(NativeCallMethod);
+            // Write explicit cast
+            writer.Write('(');
+            writer.Write(returnTypeToken);
+            writer.Write(')');
         }
 
-        // Return type!
-        if (returnNotVoid || !isComplex)
+        writer.Write(NativeCallMethod);
+
+        // Write normal syntax for value types.
+        if (!isComplex)
         {
             writer.Write('<');
-            writer.Write(returnNotVoid
-                ? context.ReturnTypeString
-                : "int");
+            writer.Write(returnTypeToken);
             writer.Write(">");
         }
 
-        // Call
+        // Start writing arguments. Native function call method begins with hash.
         writer.Write('(');
-        if (!isComplex)
+        writer.Write(context.Hash);
+
+        if (isComplex)
         {
-            writer.Write(context.Hash);
+            writer.Write(',');
+            WriteTypeOf(writer, returnTypeToken);
         }
 
-        var first = false;
         foreach (var param in commandInfo.Parameters)
         {
-            if (!isComplex || first)
-            {
-                writer.Write(',');
-            }
-
-            first = true;
+            writer.Write(',');
             writer.WriteEscapedName(param.Name);
         }
 
