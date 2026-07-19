@@ -75,9 +75,7 @@ public sealed partial class RageGenerator : CSharpGenerator
     // ReSharper disable once ForCanBeConvertedToForeach
     private static void WriteNativeCallPointerArguments(in WrapperEmitContext context,
         TextWriter writer)
-        bool determineFirst)
     {
-        var first = false;
         var paramList = context.CommandInfo.Parameters;
         for (var i = 0; i < paramList.Count; i++)
         {
@@ -164,7 +162,7 @@ public sealed partial class RageGenerator : CSharpGenerator
             writer.Write(')');
         }
 
-            writer.Write(NativeCallMethod);
+        writer.Write(NativeCallMethod);
 
         // Write normal syntax for value types.
         if (!isComplex)
@@ -176,7 +174,7 @@ public sealed partial class RageGenerator : CSharpGenerator
 
         // Start writing arguments. Native function call method begins with hash.
         writer.Write('(');
-            writer.Write(context.Hash);
+        writer.Write(context.Hash);
 
         if (isComplex)
         {
@@ -255,10 +253,18 @@ public sealed partial class RageGenerator : CSharpGenerator
             WriteTypeOf(writer, returnTypeToken);
         }
 
-        foreach (var param in commandInfo.Parameters)
+        if (commandInfo.Parameters.Count > 0)
+        {
+            foreach (var param in commandInfo.Parameters)
+            {
+                writer.Write(',');
+                writer.WriteEscapedName(param.Name);
+            }
+        }
+        else
         {
             writer.Write(',');
-            writer.WriteEscapedName(param.Name);
+            WriteEmptyArray(writer);
         }
 
         writer.WriteLine(");");

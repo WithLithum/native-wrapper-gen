@@ -45,6 +45,22 @@ public abstract class CSharpGenerator : IShimGenerator
         writer.Write(Settings.TypeSettings.GetTypeName(regularType));
     }
 
+    protected void WriteEmptyArray(TextWriter writer, string? type = null)
+    {
+        type ??= Settings.TypeSettings.AnyParameterType;
+
+        writer.Write("global::System.Array.Empty<");
+        writer.Write(type);
+        writer.Write(">()");
+    }
+
+    protected static void WriteTypeOf(TextWriter writer, string type)
+    {
+        writer.Write("typeof(");
+        writer.Write(type);
+        writer.Write(')');
+    }
+
     protected void WriteParameter(ScriptCommandParameterInfo parameterInfo,
         TextWriter writer)
     {

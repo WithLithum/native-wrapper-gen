@@ -68,11 +68,18 @@ public sealed partial class VDotNetGenerator : CSharpGenerator
         writer.WriteSurround(CommonFieldHeader, context.SymbolNameHash,
             HashValueFieldFooter);
 
-        foreach (var param in commandInfo.Parameters)
+        if (commandInfo.Parameters.Count > 0)
+        {
+            foreach (var param in commandInfo.Parameters)
+            {
+                writer.Write(", ");
+                writer.WriteEscapedName(param.Name);
+            }
+        }
+        else
         {
             writer.Write(',');
-            writer.Write(' ');
-            writer.WriteEscapedName(param.Name);
+            WriteEmptyArray(writer);
         }
 
         writer.WriteLine(");");
