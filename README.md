@@ -7,7 +7,7 @@ Currently, the following platforms are supported:
 - [Script Hook V .NET](https://github.com/scripthookvdotnet/scripthookvdotnet) and compatibles
 - RAGE Plugin Hook
 
-Compared to the [old generator](https://github.com/NativeFx/InteropGenerator) that was made 3 years ago, this generator:
+Compared to the [old generator](https://github.com/NativeFx/InteropGenerator) that was made in 2022, this generator:
 
 * runs faster (the actual generator cost less than 300ms in most runs, and the process only takes a few seconds)
 * Generates C# 7.3 code (no need for `<LangVersion>latest</LangVersion>`)
@@ -95,11 +95,12 @@ Any OS can build and run the generator.
 
 ### Wrappers
 
-The wrappers targets .NET Framework 4.8 and has to be built on Windows because of this. The wrappers are under `wrappers` directory.
+> [!NOTE]
+> .NET will take care of installing reference assemblies for you if you don't have the appropriate .NET Framework SDK installed, or is on a non-Windows system. Of course, this needs Internet access.
+
+The wrappers are generated under `wrappers` directory and uses its own solution to avoid unnecessarily slowing down IDEs.
 
 To create wrappers, use PowerShell 7 to run `GenerateNativeWrapper.ps1`. If you have ran this script at least once, you can specify `-NoDownload` to tell the script not to update native definition files.
-
-.NET SDK is still required because the generator will be built and ran.
 
 ## Licence
 
