@@ -8,39 +8,35 @@ namespace WithLithum.NativeWrapperGen.Generation;
 
 public static class DocGenerator
 {
-    private static readonly ImmutableList<char> EscapeXmlCharacters =
-    [
-        '<',
-        '>',
-        '&',
-        '"',
-        '\'',
-        '\n'
-    ];
-
     public static void WriteEscapedForDocumentation(string comment,
         TextWriter writer)
     {
         var buf = comment.AsSpan();
+        char c;
+        string? escape;
         for (var i = 0; i < buf.Length; i++)
         {
-            var c = buf[i];
-            if (EscapeXmlCharacters.Contains(c))
-            {
-                writer.Write(c switch
-                {
-                    '<' => "&lt;",
-                    '>' => "&gt;",
-                    '&' => "&amp;",
-                    '\"' => "&quot;",
-                    '\'' => "&apos;",
-                    '\n' => "<br />",
-                    _ => c.ToString() // Normally won't reach this
-                });
-                continue;
-            }
+            c = buf[i];
 
-            writer.Write(c);
+            escape = c switch
+            {
+                '<' => "&lt;",
+                '>' => "&gt;",
+                '&' => "&amp;",
+                '\"' => "&quot;",
+                '\'' => "&apos;",
+                '\n' => "<br />",
+                _ => null
+            };
+
+            if (escape != null)
+            {
+                writer.Write(escape);
+            }
+            else
+            {
+                writer.Write(c);
+            }
         }
     }
 
@@ -68,7 +64,7 @@ public static class DocGenerator
         writer.WriteLine("/// <para><b>Previously known as</b>:<br />");
         foreach (var oldName in commandInfo.OldNames)
         {
-            writer.Write($"/// <c>");
+            writer.Write("/// <c>");
             WriteEscapedForDocumentation(oldName, writer);
             writer.WriteLine("</c>");
         }

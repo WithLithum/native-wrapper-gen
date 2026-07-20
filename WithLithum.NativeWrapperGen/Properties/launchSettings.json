@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "SHVDN Cached": {
+      "commandName": "Project",
+      "commandLineArgs": "--natives-file $(SolutionDir)NWG_WORK/natives.json\r\n--file-name-format $(SolutionDir)wrappers/WithLithum.NativeWrapper/Natives.{0}.cs"
+    },
+    "RPH Cached": {
+      "commandName": "Project",
+      "commandLineArgs": "--natives-file $(SolutionDir)NWG_WORK/natives.json\r\n--generator rph\r\n--file-name-format $(SolutionDir)wrappers/WithLithum.NativeWrapper.RagePluginHook/Natives.{0}.cs"
+    }
+  }
+}
