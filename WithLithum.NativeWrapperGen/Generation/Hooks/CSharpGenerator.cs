@@ -90,9 +90,15 @@ public abstract class CSharpGenerator : IShimGenerator
         writer.Write(" static ");
         writer.Write(context.ReturnTypeString);
         writer.Write(' ');
-        writer.Write(commandInfo.Name != null
-            ? MethodNameConverter.SnakeToPascal(commandInfo.Name)
-            : context.SymbolNameHash);
+
+        if (commandInfo.Name != null)
+        {
+            WriteSnakeToPascal(commandInfo.Name, writer);
+        }
+        else
+        {
+            writer.Write(context.SymbolNameHash);
+        }
         writer.Write('(');
 
         // Write parameters
@@ -113,6 +119,22 @@ public abstract class CSharpGenerator : IShimGenerator
         }
 
         writer.Write(')');
+    }
+
+    protected void WriteSnakeToPascal(string input,
+        TextWriter writer)
+    {
+        if (input.Length < MethodNameConverter.MaximumCharacterLength)
+        {
+            Span<char> nameBuf = stackalloc char[input.Length];
+            MethodNameConverter.SnakeToPascal(input.AsSpan(),
+                nameBuf);
+            writer.Write(nameBuf);
+        }
+        else
+        {
+            writer.Write(MethodNameConverter.SnakeToPascal(input));
+        }
     }
 
     public abstract void WriteMethod(in WrapperEmitContext context, TextWriter writer);

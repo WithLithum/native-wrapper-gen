@@ -19,4 +19,18 @@ public class CaseConverterTests
         // Assert
         Assert.Equal("ThisIsARegularString", result);
     }
+
+    [Fact]
+    public void SnakeToPascalSpan_RegularUpperPascalString_FormatCorrectly()
+    {
+        // Arrange
+        const string toConvert = "THIS_IS_A_REGULAR_STRING";
+        Span<char> nameBuf = stackalloc char[toConvert.Length];
+
+        // Act
+        var written = MethodNameConverter.SnakeToPascal(toConvert.AsSpan(), nameBuf);
+
+        // Assert
+        Assert.Equal("ThisIsARegularString", nameBuf[..written]);
+    }
 }

@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+using System.Buffers;
+
 namespace WithLithum.NativeWrapperGen.Generation;
 
 public static class MethodNameConverter
@@ -22,21 +24,17 @@ public static class MethodNameConverter
         return from[1..];
     }
 
-    public static string SnakeToPascal(string from)
+    public static int SnakeToPascal(in ReadOnlySpan<char> input,
+        in Span<char> buffer)
     {
-        ReadOnlySpan<char> fromSpan = from.AsSpan();
-        Span<char> toSpan = fromSpan.Length >= MaximumCharacterLength
-            ? stackalloc char[MaximumCharacterLength]
-            : stackalloc char[from.Length];
-
         var isCaptialize = true;
         var writeIndex = 0;
 
         // fromSpan and toSpan have the same length except when fromSpan exceeds,
         // MaximumCharacterLength. In that case, the length is MaximumCharacterLength.
-        for (int i = 0; i < toSpan.Length; i++)
+        for (int i = 0; i < buffer.Length; i++)
         {
-            var ch = fromSpan[i];
+            var ch = input[i];
             if (ch == '_') // Underscore
             {
                 isCaptialize = true;
@@ -58,10 +56,20 @@ public static class MethodNameConverter
             }
 
             // Write the character and advance the write index.
-
-            toSpan[writeIndex] = writeCh;
-            writeIndex++;
+            buffer[writeIndex++] = writeCh;
         }
+
+        return writeIndex;
+    }
+
+    public static string SnakeToPascal(string from)
+    {
+        ReadOnlySpan<char> fromSpan = from.AsSpan();
+        Span<char> toSpan = fromSpan.Length >= MaximumCharacterLength
+            ? ArrayPool<char>.Shared.Rent(fromSpan.Length)
+            : stackalloc char[fromSpan.Length];
+
+        var writeIndex = SnakeToPascal(fromSpan, toSpan);
 
         return new string(toSpan[..writeIndex]);
     }
