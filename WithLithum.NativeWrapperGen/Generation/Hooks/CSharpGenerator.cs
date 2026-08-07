@@ -7,11 +7,11 @@ namespace WithLithum.NativeWrapperGen.Generation.Hooks;
 
 public abstract class CSharpGenerator : IShimGenerator
 {
-    public const string CommonFieldHeader = "NWG_";
-    public const string ShimVariableFooter = "_shim";
-    public const string ReturnValueVariable = "NWG_return_value";
+    protected const string CommonFieldHeader = "NWG_";
+    protected const string ShimVariableFooter = "_shim";
+    protected const string ReturnValueVariable = "NWG_return_value";
 
-    public GeneratorSettings Settings { get; }
+    protected GeneratorSettings Settings { get; }
 
     protected CSharpGenerator(GeneratorSettings settings)
     {
@@ -104,7 +104,7 @@ public abstract class CSharpGenerator : IShimGenerator
         }
         else
         {
-            writer.Write(context.SymbolNameHash);
+            WriteHashMethodName(context, writer);
         }
         writer.Write('(');
 
@@ -126,6 +126,17 @@ public abstract class CSharpGenerator : IShimGenerator
         }
 
         writer.Write(')');
+    }
+
+    protected void WriteHashMethodName(in WrapperEmitContext context,
+        TextWriter writer)
+    {
+        Span<char> nameBuf = stackalloc char[MethodNameConverter.GetExpectedMethodNameSize(
+            Settings.HashNameStyle)];
+        var written = MethodNameConverter.HashToMethodName(context.Hash,
+            nameBuf,
+            Settings.HashNameStyle);
+        writer.Write(nameBuf[..written]);
     }
 
     protected void WriteSnakeToPascal(string input,

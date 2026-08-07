@@ -28,7 +28,6 @@ partial class WrapperFileGenerator
         return new WrapperEmitContext
         {
             Hash = hash,
-            SymbolNameHash = MethodNameConverter.HashToMethodName(hash),
             CommandInfo = commandInfo,
             Namespace = nameSpace,
             ReturnTypeString = GetStringForType(commandInfo.ReturnType)

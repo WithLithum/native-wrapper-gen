@@ -35,8 +35,11 @@ public sealed partial class VDotNetGenerator : CSharpGenerator
     private void WriteHashDefinition(in WrapperEmitContext context, TextWriter writer)
     {
         writer.Write("private static readonly global::GTA.Native.Hash ");
-        writer.WriteSurround(CommonFieldHeader, context.SymbolNameHash,
-            HashValueFieldFooter);
+        
+        writer.Write(CommonFieldHeader);
+        WriteHashMethodName(context, writer);
+        writer.Write(HashValueFieldFooter);
+        
         writer.Write(" = (global::GTA.Native.Hash)");
         writer.Write(context.Hash);
         writer.WriteLine(';');
@@ -65,8 +68,9 @@ public sealed partial class VDotNetGenerator : CSharpGenerator
 
         writer.Write('(');
 
-        writer.WriteSurround(CommonFieldHeader, context.SymbolNameHash,
-            HashValueFieldFooter);
+        writer.Write(CommonFieldHeader);
+        WriteHashMethodName(context, writer);
+        writer.Write(HashValueFieldFooter);
 
         if (commandInfo.Parameters.Count > 0)
         {

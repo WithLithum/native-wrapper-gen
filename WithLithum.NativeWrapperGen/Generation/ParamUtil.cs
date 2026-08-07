@@ -88,6 +88,17 @@ internal static class ParamUtil
         writer.Write(content);
         writer.Write(foot);
     }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void WriteSurround(this TextWriter writer,
+        string head,
+        in ReadOnlySpan<char> content,
+        string foot)
+    {
+        writer.Write(head);
+        writer.Write(content);
+        writer.Write(foot);
+    }
 
     internal static void WriteEscapedName(this TextWriter writer, string name)
     {

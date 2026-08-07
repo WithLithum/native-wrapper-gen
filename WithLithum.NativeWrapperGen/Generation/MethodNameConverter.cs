@@ -12,16 +12,77 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 using System.Buffers;
+using WithLithum.NativeWrapperGen.Models.Settings;
 
 namespace WithLithum.NativeWrapperGen.Generation;
 
 public static class MethodNameConverter
 {
     public const int MaximumCharacterLength = 150;
-
-    public static string HashToMethodName(string from)
+    private const int NativeHashSize = 18;
+    
+    public static int GetExpectedMethodNameSize(HashNameStyle style)
     {
-        return from[1..];
+        return style switch
+        {
+            HashNameStyle.RagePluginHook => NativeHashSize - 1,
+            HashNameStyle.Cfx => NativeHashSize + 2,
+            _ => throw new ArgumentOutOfRangeException(nameof(style), style, 
+                "Unrecognised hash name style. Did you cast from int?")
+        };
+    }
+    
+    public static int HashToMethodName(in ReadOnlySpan<char> input,
+        in Span<char> buffer,
+        HashNameStyle style)
+    {
+        if (input.Length != NativeHashSize)
+        {
+            throw new ArgumentException($"Hash name must be {NativeHashSize} characters long.",
+                nameof(input));
+        }
+        
+        return style switch
+        {
+            HashNameStyle.RagePluginHook => HashToMethodNameInternalRage(input, buffer),
+            HashNameStyle.Cfx => HashToMethodNameInternalCfx(input, buffer),
+            _ => throw new ArgumentOutOfRangeException(nameof(style), style, 
+                "Unrecognised hash name style. Did you cast from int?")
+        };
+    }
+
+    private static int HashToMethodNameInternalRage(in ReadOnlySpan<char> input,
+        in Span<char> buffer)
+    {
+        var expectedSize = input.Length - 1;
+        if (expectedSize > buffer.Length)
+        {
+            throw new ArgumentException($"Buffer is too small. Expected {expectedSize} characters.",
+                nameof(input));
+        }
+
+        buffer[0] = 'x';
+        input[2..].ToUpperInvariant(buffer[1..]);
+        return input.Length - 1;
+    }
+
+    private static int HashToMethodNameInternalCfx(in ReadOnlySpan<char> input,
+        in Span<char> buffer)
+    {
+        const string prefix = "N_";
+        
+        var expectedSize = input.Length + 2;
+        if (expectedSize > buffer.Length)
+        {
+            throw new ArgumentException($"Buffer is too small. Expected {expectedSize} characters.",
+                nameof(input));
+        }
+        
+        prefix.CopyTo(buffer);
+
+        Span<char> target = buffer[prefix.Length..];
+        input.ToLowerInvariant(target);
+        return expectedSize;
     }
 
     public static int SnakeToPascal(in ReadOnlySpan<char> input,

@@ -4,6 +4,7 @@
 using WithLithum.NativeWrapperGen.Generation;
 using WithLithum.NativeWrapperGen.Generation.Hooks;
 using WithLithum.NativeWrapperGen.Models;
+using WithLithum.NativeWrapperGen.Models.Settings;
 
 namespace NativeWrapperGenTests;
 
@@ -31,8 +32,7 @@ public class GeneratorTest
             Namespace = "TEST",
             CommandInfo = info,
             Hash = hash,
-            ReturnTypeString = "void",
-            SymbolNameHash = hash,
+            ReturnTypeString = "void"
         };
     }
     
@@ -43,7 +43,7 @@ public class GeneratorTest
         var info = CreateNoParams("TEST_NATIVE",
             "TestNativeOverriden");
         var generator = new VDotNetGenerator(VDotNetGenerator.DefaultSettings);
-        var context = CreateContext(info, "0x123567890ABCDEF");
+        var context = CreateContext(info, "0xAC2890471901861C");
 
         var writer = new StringWriter();
 
@@ -60,7 +60,7 @@ public class GeneratorTest
         // Arrange
         var info = CreateNoParams("TEST_NATIVE");
         var generator = new VDotNetGenerator(VDotNetGenerator.DefaultSettings);
-        var context = CreateContext(info, "0x123567890ABCDEF");
+        var context = CreateContext(info, "0xAC2890471901861C");
 
         var writer = new StringWriter();
 
@@ -77,7 +77,7 @@ public class GeneratorTest
         // Arrange
         var info = CreateNoParams(null);
         var generator = new VDotNetGenerator(VDotNetGenerator.DefaultSettings);
-        var context = CreateContext(info, "x123567890ABCDEF");
+        var context = CreateContext(info, "0xAC2890471901861C");
 
         var writer = new StringWriter();
 
@@ -85,6 +85,26 @@ public class GeneratorTest
         generator.WriteMethodSignature(context, writer);
         
         // Assert
-        Assert.Equal("public static void x123567890ABCDEF()", writer.ToString());
+        Assert.Equal("public static void xAC2890471901861C()", writer.ToString());
+    }
+    
+    [Fact]
+    public void WriteMethodSignature_WithHashOnlyCfxStyle_Correct()
+    {
+        // Arrange
+        ScriptCommandInfo info = CreateNoParams(null);
+        var generator = new VDotNetGenerator(VDotNetGenerator.DefaultSettings with
+        {
+            HashNameStyle = HashNameStyle.Cfx
+        });
+        var context = CreateContext(info, "0xAC2890471901861C");
+
+        var writer = new StringWriter();
+
+        // Act
+        generator.WriteMethodSignature(context, writer);
+        
+        // Assert
+        Assert.Equal("public static void N_0xac2890471901861c()", writer.ToString());
     }
 }

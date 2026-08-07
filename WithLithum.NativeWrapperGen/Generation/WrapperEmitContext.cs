@@ -9,7 +9,6 @@ public readonly ref struct WrapperEmitContext
 {
     public required string Namespace { get; init; }
     public required string Hash { get; init; }
-    public required string SymbolNameHash { get; init; }
     public required ScriptCommandInfo CommandInfo { get; init; }
     public required string ReturnTypeString { get; init; }
 }

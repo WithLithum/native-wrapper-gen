@@ -19,4 +19,9 @@ public record GeneratorSettings
     /// Gets the accessibility modifier to use for generated symbols.
     /// </summary>
     public required string Accessibility { get; init; }
+    
+    /// <summary>
+    /// Gets the style used for converting hash names of unnamed natives to valid symbol names.
+    /// </summary>
+    public HashNameStyle HashNameStyle { get; init; }
 }

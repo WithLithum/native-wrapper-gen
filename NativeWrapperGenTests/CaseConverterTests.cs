@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using WithLithum.NativeWrapperGen.Generation;
+using WithLithum.NativeWrapperGen.Models.Settings;
 
 namespace NativeWrapperGenTests;
 
@@ -32,5 +33,69 @@ public class CaseConverterTests
 
         // Assert
         Assert.Equal("ThisIsARegularString", nameBuf[..written]);
+    }
+
+    [Fact]
+    public void HashToMethodRage_UpperCaseHash_FormatCorrectly()
+    {
+        // Arrange
+        const string toConvert = "0xA17784FCA9548D15";
+        Span<char> nameBuf = stackalloc char[17]; // 18 - 1
+        
+        // Act
+        var written = MethodNameConverter.HashToMethodName(toConvert, 
+            nameBuf,
+            HashNameStyle.RagePluginHook);
+        
+        // Assert
+        Assert.Equal("xA17784FCA9548D15", nameBuf[..written]);
+    }
+    
+    [Fact]
+    public void HashToMethodRage_LowerCaseHash_FormatCorrectly()
+    {
+        // Arrange
+        const string toConvert = "0xa17784fca9548d15";
+        Span<char> nameBuf = stackalloc char[17]; // 18 - 1
+        
+        // Act
+        var written = MethodNameConverter.HashToMethodName(toConvert, 
+            nameBuf,
+            HashNameStyle.RagePluginHook);
+        
+        // Assert
+        Assert.Equal("xA17784FCA9548D15", nameBuf[..written]);
+    }
+    
+    [Fact]
+    public void HashToMethodCfx_UpperCaseHash_FormatCorrectly()
+    {
+        // Arrange
+        const string toConvert = "0xA17784FCA9548D15";
+        Span<char> nameBuf = stackalloc char[20]; // 18 + 2
+        
+        // Act
+        var written = MethodNameConverter.HashToMethodName(toConvert, 
+            nameBuf,
+            HashNameStyle.Cfx);
+        
+        // Assert
+        Assert.Equal("N_0xa17784fca9548d15", nameBuf[..written]);
+    }
+    
+    [Fact]
+    public void HashToMethodCfx_LowerCaseHash_FormatCorrectly()
+    {
+        // Arrange
+        const string toConvert = "0xa17784fca9548d15";
+        Span<char> nameBuf = stackalloc char[20]; // 18 + 2
+        
+        // Act
+        var written = MethodNameConverter.HashToMethodName(toConvert, 
+            nameBuf,
+            HashNameStyle.Cfx);
+        
+        // Assert
+        Assert.Equal("N_0xa17784fca9548d15", nameBuf[..written]);
     }
 }

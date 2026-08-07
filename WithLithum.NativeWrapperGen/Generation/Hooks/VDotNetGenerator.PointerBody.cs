@@ -90,8 +90,7 @@ public partial class VDotNetGenerator
         }
 
         writer.Write('('); // begin arguments
-        writer.WriteSurround(CommonFieldHeader, context.SymbolNameHash, HashValueFieldFooter);
-
+        
         WriteNativeCallPointerArguments(context, writer);
 
         writer.WriteLine(");"); // end arguments
