@@ -134,9 +134,9 @@ public abstract class CSharpGenerator : IShimGenerator
         if (input.Length < MethodNameConverter.MaximumCharacterLength)
         {
             Span<char> nameBuf = stackalloc char[input.Length];
-            MethodNameConverter.SnakeToPascal(input.AsSpan(),
+            var written = MethodNameConverter.SnakeToPascal(input.AsSpan(),
                 nameBuf);
-            writer.Write(nameBuf);
+            writer.Write(nameBuf[..written]);
         }
         else
         {
