@@ -1,0 +1,47 @@
+name: Wrapper bug report
+description: Report a problem with the pre-built wrappers (WithLithum.NativeWrapper).
+title: "[Bug]: "
+labels: ["type/bug", "new"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+          Thank you for taking your time to report a problem. Please fill the form below appropriately to enable us to triage and address the problem in a timely fashion.
+
+          Before you continue, read the [CONTRIBUTING guide](https://github.com/WithLithum/native-wrapper-gen/blob/trunk/CONTRIBUTING.md).
+
+          If this bug report has to do with the generated code you encountered instead, or you know that the reason was due to faulty generated code, use the "Generator bug report" form instead.
+  - type: textarea
+    attributes:
+        label: Describe the problem
+        description: |
+            A summary of what is the problem you are trying to report.
+    validations:
+        required: true
+  - type: dropdown
+    attributes:
+        label: Affected script hook
+        description: Which script hook are you using when you encountered the problem? Select all the affected, if possible.
+        multiple: true
+        options:
+          - Script Hook V .NET (SHVDN)
+          - RAGE Plugin Hook (RPH)
+          - Others / I don't know
+    validations:
+        required: true
+  - type: textarea
+    attributes:
+        label: Code sample
+        description: |
+            If applicable, a minimal proof of concept code sample to reproduce the issue.
+            This information should be present whenever applicable as this allows us to diagnose the source of the problem correctly.
+        render: C#
+  - type: textarea
+    attributes:
+        label: Expected behaviour
+        description: |
+            Describe what should have happened instead?
+  - type: textarea
+    attributes:
+        label: Extra information
+        description: If applicable, put additional information here.
