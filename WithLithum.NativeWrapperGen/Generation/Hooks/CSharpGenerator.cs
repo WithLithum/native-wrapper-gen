@@ -79,7 +79,7 @@ public abstract class CSharpGenerator : IShimGenerator
         writer.WriteEscapedName(parameterInfo.Name);
     }
 
-    protected void WriteMethodSignature(in WrapperEmitContext context,
+    protected internal void WriteMethodSignature(in WrapperEmitContext context,
         TextWriter writer)
     {
         var commandInfo = context.CommandInfo;
