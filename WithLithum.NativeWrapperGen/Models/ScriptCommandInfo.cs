@@ -18,6 +18,12 @@ using System.Text.Json.Serialization;
 public record ScriptCommandInfo
 {
     public string? Name { get; init; }
+    
+    /// <summary>
+    /// Gets the override symbol name of the script command that will be emitted. This property is
+    /// a Native Wrapper Generator extension.
+    /// </summary>
+    public string? SymbolName { get; init; }
 
     [JsonPropertyName("jhash")]
     public string? JenkinsHash { get; init; }

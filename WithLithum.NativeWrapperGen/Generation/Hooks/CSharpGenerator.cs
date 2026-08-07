@@ -93,7 +93,14 @@ public abstract class CSharpGenerator : IShimGenerator
 
         if (commandInfo.Name != null)
         {
-            WriteSnakeToPascal(commandInfo.Name, writer);
+            if (!string.IsNullOrWhiteSpace(commandInfo.SymbolName))
+            {
+                writer.Write(commandInfo.SymbolName);
+            }
+            else
+            {
+                WriteSnakeToPascal(commandInfo.Name, writer);   
+            }
         }
         else
         {

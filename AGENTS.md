@@ -12,14 +12,7 @@ It is designed to work with:
 
 ## Project Structure
 
-Components of this project are broken down below in a tree hierarchy:
-
 - `WithLithum.NativeWrapperGen`: The wrapper generator program.
-  - `/Data`: Embedded data files used by the wrapper generator.
-  - `/Generation`: The wrapper generator logic.
-    - `/Hooks`: The logic responsible for generating shim methods for each specific hook.
-  - `/Models`: Contains data models for settings and alloc8or native db file.
-  - `/Serialization`: Contains System.Text.Json serialization logic.
 - `NativeWrapperGenTests`: The unit tests for the wrapper generator.
 - `Benchmarks`: Benchmarks for the wrapper generator.
 - `wrappers`: Pre-built wrapper package projects.
@@ -32,5 +25,4 @@ Components of this project are broken down below in a tree hierarchy:
 
 ## Code standards
 
-- Follow the project [style guide](docs/CODESTYLES.md)
-- Every hook specific generator MUST inherit from `CSharpGenerator`
+- [Style guide](docs/CODESTYLES.md)
