@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this very file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0-beta.3] - 2026-08-12
+
+### Added
+
+- Added support for reading a `SymbolName` property in native definition files.
+  - This property overrides the default symbol name, which is case converted from the provided
+    R* native name.
+  - This is a Native Wrapper Generator extension.
+- Added support for using Cfx.re styled hash only native symbol naming.
+
+### Changed
+
+- Made improvement to the documentation generator and native name casing converter to reduce GC
+  pressure.
+
 ## [0.3.0-beta.2] - 2026-07-19
 
 ### Changed
@@ -44,7 +59,7 @@ _See the corresponding [`migration guide`](docs/MIGRATION.md#0.3.0) for migratin
 
 ### Changed
 
-- **BREAKING**: Overhualed how type settings work.
+- **BREAKING**: Overhauled how type settings work.
   - Consolidated the previous one-to-one map into 7 properties which maps to each of the types.
   - Default configuration files are no longer bundled in the `Data` directory.
 - Buffered streams are now used for writing generated files.
@@ -114,6 +129,7 @@ return type of the method in question.
 
 _Initial release._
 
+[0.3.0-beta.3]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.3.0-beta.2...v0.3.0-beta.3
 [0.3.0-beta.2]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.3.0-beta.1...v0.3.0-beta.2
 [0.3.0-beta.1]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.3.0-alpha.3...v0.3.0-beta.1
 [0.3.0-alpha.3]: https://github.com/WithLithum/native-wrapper-gen/compare/v0.3.0-alpha.2...v0.3.0-alpha.3
