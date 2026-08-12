@@ -91,6 +91,10 @@ public partial class VDotNetGenerator
 
         writer.Write('('); // begin arguments
         
+        writer.Write(CommonFieldHeader);
+        WriteHashMethodName(context, writer);
+        writer.Write(HashValueFieldFooter);
+        
         WriteNativeCallPointerArguments(context, writer);
 
         writer.WriteLine(");"); // end arguments
