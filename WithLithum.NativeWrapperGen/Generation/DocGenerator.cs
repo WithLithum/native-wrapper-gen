@@ -1,11 +1,13 @@
 // SDPX-FileCopyrightText: 2025-2026 WithLithum
 // SPDX-License-Identifier: Apache-2.0
 
-using System.Collections.Immutable;
 using WithLithum.NativeWrapperGen.Models;
 
 namespace WithLithum.NativeWrapperGen.Generation;
 
+/// <summary>
+/// Generates C# XML documentation comments ("ECMAXML") from <see cref="ScriptCommandInfo"/> data.
+/// </summary>
 public static class DocGenerator
 {
     public static void WriteEscapedForDocumentation(string comment,
@@ -121,5 +123,26 @@ public static class DocGenerator
             writer.Write(commandInfo.ReturnType.ToString());
             writer.WriteLine("</c></returns>");
         }
+    }
+
+    public static void WriteParameter(TextWriter writer,
+        ScriptCommandParameterInfo param)
+    {
+        writer.Write("/// <param name=\"");
+        writer.Write(param.Name);
+        writer.Write("\">");
+
+        if (!string.IsNullOrWhiteSpace(param.Comment))
+        {
+            WriteEscapedForDocumentation(param.Comment, writer);
+        }
+        else
+        {
+            writer.Write("<c>");
+            writer.Write(Enum.GetName(param.Type) ?? "Unk");
+            writer.Write("</c>");
+        }
+
+        writer.WriteLine("</param>");
     }
 }

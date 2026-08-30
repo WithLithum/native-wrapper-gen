@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2025 WithLithum.
+// Copyright (C) 2025 WithLithum.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,5 +16,12 @@ namespace WithLithum.NativeWrapperGen.Models;
 public readonly record struct ScriptCommandParameterInfo
 {
     public required string Name { get; init; }
+
     public required ScriptCommandParameterType Type { get; init; }
+
+    /// <summary>
+    /// Gets the human readable description of the current parameter. This property is an NWG
+    /// extension.
+    /// </summary>
+    public string? Comment { get; init; }
 }
