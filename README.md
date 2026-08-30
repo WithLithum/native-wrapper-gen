@@ -1,5 +1,8 @@
 # Native Wrapper Generator
 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/WithLithum/native-wrapper-gen/build-and-test.yml?style=flat-square&logo=github)
+![CalVer](https://img.shields.io/badge/calver-YYYY.0M.0D-22bfda?style=flat-square)
+
 This program generates wrapper methods for native function, to be used with .NET script hook (wrappers) that works with Grand Theft Auto V Legacy.
 
 Currently, the following platforms are supported:
